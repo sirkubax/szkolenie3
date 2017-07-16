@@ -1,0 +1,23 @@
+[all:vars]
+ansible_connection=ssh
+ansible_ssh_private_key_file = ~/.ssh/id_rsa_szkolenie
+ansible_ssh_user = ubuntu
+system_env = szkolenie
+location = london
+
+#przykład:
+[localhost]
+localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python"
+
+[mgmt]
+mgmt.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
+
+[apache]
+35.176.59.111
+35.176.80.34
+
+[backend]
+
+[prod:children]
+apache
+backend

@@ -1,0 +1,142 @@
+###
+#############################
+# Part 1:                   
+# Create instances VPN_1 
+#############################
+
+- name: Create base VPC and SG infrastructure on Amazon 
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+  - vars_files_var: ["vars/szkolenie_vpc.yml"]
+
+  pre_tasks:
+      - include_vars: "{{ item }}"
+        with_first_found: "{{ vars_files_var }}"
+      - set_fact:
+          generic_vpc: "{{ szkolenie_vpc }}"
+
+  roles:
+      - { role: mid_create_vpc }
+
+#############################
+# Part 2:                   
+# Create instances
+#############################
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  vars:
+  - vars_files_var: ["../../../vars/szkolenie_vpc.yml"]
+
+  roles:
+      - { role: sys_create_aws_szkolenie, source_dest_check: False }
+
+#############################
+# Part 3:                   
+# Set hostname
+#############################
+
+- name: Set instance hostname
+  hosts: temp_group
+  gather_facts: False
+
+  vars:
+  - vars_files_var: ["vars/szkolenie_vpc.yml"]
+
+  pre_tasks:
+      - include_vars: "{{ item }}"
+        with_first_found: "{{ vars_files_var }}"
+      - name: Set correct ssh key path
+        set_fact: 
+          ansible_ssh_private_key_file: "{{ ssh_key }}"
+        when: ssh_key is defined
+
+
+  tasks:
+      - name: install python 2
+        raw: bash -c "test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)"
+        become: true
+
+
+#  - name: Ensure IP forwarding enabled
+#    sysctl: name=net.ipv4.ip_forward value=1
+#    become: True
+  
+#############################
+# Part 3:                   
+# Apply default roles to tagged instances 
+#############################
+
+- name: Apply default roles to tagged instances 
+  hosts: temp_group
+  become: True
+
+  roles:
+      - sys_init_common
+      - sys_manage_keys
+      - sys_debug
+ 
+#############################
+# Part 3:                   
+# Set hostname
+#############################
+
+- name: Set instance hostname
+  hosts: temp_group
+  gather_facts: False
+
+  vars:
+  - vars_files_var: ["vars/szkolenie_vpc.yml"]
+
+  pre_tasks:
+      - include_vars: "{{ item }}"
+        with_first_found: "{{ vars_files_var }}"
+      - name: Set correct ssh key path
+        set_fact: 
+          ansible_ssh_private_key_file: "{{ ssh_key }}"
+        when: ssh_key is defined
+
+  tasks:
+  
+    - name: "name instances A (set hostname)"
+      hostname:
+          name={{ szkolenie_vpc.ec2_eip.instance_A.name }}
+      when: inventory_hostname == szkolenie_vpc.ec2_eip.instance_A.ip
+      become: True
+
+    - name: update /etc/hosts
+      lineinfile: >
+          dest=/etc/hosts
+          line="{{ inventory_hostname }} {{ szkolenie_vpc.ec2_eip.instance_A.name }}"
+          regexp="^{{ inventory_hostname }}"
+      when: inventory_hostname == szkolenie_vpc.ec2_eip.instance_A.ip
+      become: true
+
+#########################################
+# Part 4:                   
+# change tags 
+#########################################
+
+- hosts: temp_group
+  gather_facts: False
+  connection: local
+
+  tasks:
+    - name: Change tags
+      #ec2_tag: resource={{ ansible_ec2_instance_id }} {{ ansible_ec2_placement_region }}
+      #boto region bug
+      ec2_tag: resource={{ ansible_ec2_instance_id }} ec2_url=https://ec2.eu-west-2.amazonaws.com
+      args:
+          tags:
+              state_tag: prepared
+#              Name: "{{ hostname_base }}"
+      delegate_to: localhost
+
+    - name: Get rid of SSH "Are you sure you want to continue connecting (yes/no)?" query
+      local_action: command sh -c 'ssh-keyscan -t rsa {{ item }} >>$HOME/.ssh/known_hosts'
+      with_items: "{{ play_hosts }}"

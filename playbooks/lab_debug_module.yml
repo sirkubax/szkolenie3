@@ -1,0 +1,15 @@
+---
+- hosts: apache
+  become: True
+
+  vars:
+      vars_files_var: ["vars/szkolenie.yml", "vars/szkolenie_vault.yml"]
+
+  pre_tasks:
+      - include_vars: "{{ item }}"
+        with_items: "{{ vars_files_var }}"
+
+  tasks:
+    - name: "debug file module"
+      ping:
+

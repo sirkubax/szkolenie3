@@ -1,0 +1,39 @@
+  - debug: msg="{{ generic_vpc }}"
+
+  - name: Check szkolenie VPC existence
+    ec2_vpc:
+        cidr_block: "{{ generic_vpc.vpc.cidr_block }}"
+        region: "{{region}}"
+        internet_gateway: True
+        resource_tags:
+            Name:  "{{ generic_vpc.vpc.name }}"
+        subnets:
+              "{{ generic_vpc.vpc.subnets }}"
+        wait: yes
+    when: vpc_id is not defined
+    register: vpc
+
+# Do not lunch when allow_vpc_change is not defined - a flag to prevent automatic change on PRD vpc 
+  - name: Update szkolenie VPC configuration
+    ec2_vpc:
+        cidr_block: "{{ generic_vpc.vpc.cidr_block }}" 
+        region: "{{region}}"
+        internet_gateway: True
+        resource_tags:
+            Name:  "{{ generic_vpc.vpc.name }}"
+        subnets:
+              "{{ generic_vpc.vpc.subnets }}"
+        route_tables:
+          "{{ generic_vpc.route }}"
+        wait: yes
+    when: vpc_id is not defined and vpc.changed and allow_vpc_change is defined and allow_vpc_change == True
+
+  - name: Create szkolenie {{env_name}} security group
+    local_action:
+        module: ec2_group
+        name: "{{ generic_vpc.security_groups.name }}"
+        description: "{{ generic_vpc.security_groups.description }}"
+        vpc_id: "{{ vpc_id |default(vpc.vpc_id) }}"
+        region: "{{ region }}"
+        rules:
+            "{{ generic_vpc.security_groups.rules }}"

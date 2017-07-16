@@ -1,0 +1,76 @@
+---
+#Uruchomienie:
+#~/szkolenie$ ansible-playbook playbooks/init_mgmt.yml
+#
+- hosts: mgmt
+  become: True
+
+  vars:
+      vars_files_var: ["vars/szkolenie.yml", "vars/szkolenie_vault.yml"]
+      init_userspace: True
+      group: mgmt
+      users: "{{ users_vault }}"
+
+  pre_tasks:
+      - include_vars: "{{ item }}"
+        with_items: "{{ vars_files_var }}"
+
+  roles:
+    - sys_init_common
+    - sys_manage_keys
+
+  tasks:
+
+    - name: "create mgmt group"
+      become: true
+      group: >
+        name={{ group }}
+
+    - name: "create user with not defined uid"
+      user: name={{ item.user }} shell={{ shell | default('/bin/bash') }} home=/home/{{ item.user }} generate_ssh_key={{ generate_ssh_key | default(False) }} group={{ group }}
+      with_items: "{{ users }}"
+    
+    - name: "create user with not defined uid"
+      lineinfile:
+          dest: '/etc/shadow'
+          regexp: '^{{ item.user }}'
+          line: '{{ item.user }}:$6$2LjHo.FB$oq5XDTqivj4HEzhppkjHExSH1aSnRI/MIHIDBTsfCsGIWrBGajD6wzSDRYMarYWX.YuWx1AH8kBz8X.Mew/x2/:17296:0:99999:7:::'
+      with_items: "{{ users }}"
+
+    - name: "init vim/screen"
+      unarchive: src=../opt/my_env.tgz dest=/home/{{ item.user }}
+      when: init_userspace is defined and init_userspace == True
+      with_items: "{{ users }}"
+    
+    - name: "stat for {{ home }}/.bashrc file"
+      stat: path="/home/{{ item.user }}/.bashrc"
+      with_items: "{{ users }}"
+    
+    - name: "fix screen 'Cant gett tty'"
+      lineinfile: >
+          dest=/home/{{ item.user }}/.bashrc
+          line="function screen() { /usr/bin/script -q -c \"/usr/bin/screen ${*}\" /dev/null ;}"
+      with_items: "{{ users }}"
+
+    - name: "upload ssh key"
+      copy: 
+          src: roles/sys_manage_keys/files/id_rsa_szkolenie
+          dest: "/home/{{ item.user }}/.ssh/"
+          mode: 0400
+          owner: "{{ item.user }}"
+      with_items: "{{ users }}"
+
+    - name: "chmod .ssh folder" 
+      file: 
+          dest: "/home/{{ item.user }}/.ssh/"
+          mode: 0755
+          owner: "{{ item.user }}"
+          state: directory
+      with_items: "{{ users }}"
+
+
+    - name: "allow sudo"
+      lineinfile: >
+          dest="/etc/sudoers"
+          line="%mgmt   ALL=(ALL:ALL) NOPASSWD:ALL"
+

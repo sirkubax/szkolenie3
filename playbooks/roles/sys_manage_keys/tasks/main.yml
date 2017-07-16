@@ -1,0 +1,10 @@
+- authorized_key: user=ubuntu key="{{ lookup('file', item.name) }}" state="{{ item.state | default('present') }}"
+  when: location == 'irland'
+  with_items:
+    - { name: id_rsa.kub.pub }
+
+- authorized_key: user=ubuntu key="{{ lookup('file', item.name) }}" state="{{ item.state | default('present') }}"
+  with_items:
+    - { name: id_rsa.kub.pub }
+    #- { name: id_rsa.kub.pub, state: absent }
+    - { name: id_rsa_szkolenie.pub }

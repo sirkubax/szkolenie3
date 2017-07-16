@@ -1,0 +1,74 @@
+# This part checks if there are present 2 nodes that belongs to the role+counter group (example, vpn vpn_1-stg)
+#
+# Then it localy fix known_hosts and returns dynamic temporary temp_group that is used in further part of the provisioning
+#
+
+- name: Check provisioned instances (note that instance_order tag is skipped, and the instance_group is checked to match quota)
+  ec2:
+      region: "{{ region | default('eu-west-2') }}"
+      key_name: "{{ key | default('szkolenie_05_london') }}"
+      group: "{{ sg_group | default(generic_vpc.security_groups.name) }}" 
+      instance_type: "{{ type | default('t2.medium') }}"
+      image: "{{ ami | default('ami-f1d7c395') }}"
+      vpc_subnet_id: "{{ subnet | default(vpc.subnets[0].id) }}"
+      wait: yes
+      exact_count: "{{ count | default(1) }}"
+      source_dest_check: "{{ source_dest_check | default(True) }}"
+      count_tag:
+          role: "{{ host_role | default('szkolenie') }}"
+          instance_group: "{{ generic_vpc.instance_group }}"
+      instance_tags:
+          counter: szkolenie-{{env_name}}
+          allow_change: True
+          location: "{{ location |default('london') }}"
+          role: "{{ host_role | default('szkolenie') }}"
+      volumes:
+          - device_name: /dev/sda1
+            device_type: gp2
+            volume_size: "{{ disk | default(55) }}"
+            delete_on_termination: "{{ delete_disk | default(True) }}"
+          - device_name: /dev/sdb
+            device_type: gp2
+            volume_size: "{{ diskB | default(0) }}"
+            delete_on_termination: "{{ delete_disk | default(True) }}"
+            #iops: 50
+      assign_public_ip: False
+  register: ec2
+
+- name: Wait for instances to listen on port 22
+  wait_for:
+      state: started 
+      host: "{{ item.public_ip }}"
+      port: 22 
+      timeout: 150 
+      delay: 5
+  delegate_to: localhost
+  with_items: "{{ ec2.tagged_instances }}"
+
+- name: Fix .ssh/known_hosts.
+  local_action: command  ssh-keygen -f ~/.ssh/known_hosts -R {{ item.public_ip }}
+  when: item.public_ip is defined and item.public_ip != 'null'
+  with_items: "{{ ec2.tagged_instances }}"
+  ignore_errors: True
+  changed_when: False
+      
+- name: Get rid of SSH "Are you sure you want to continue connecting (yes/no)?" query
+  local_action: command sh -c 'ssh-keyscan -H {{ item.public_ip }} >>$HOME/.ssh/known_hosts'
+  with_items: "{{ ec2.tagged_instances }}"
+  ignore_errors: True
+  changed_when: False
+ 
+- name: Add instances to host group
+  local_action: add_host hostname={{ item.public_ip }} groupname=temp_group
+  with_items: "{{ ec2.tagged_instances }}"
+
+- name: List instance tags
+  ec2_tag:
+    region: "{{ region | default('eu-west-2') }}"
+    resource: "{{ item.id }}"
+    state: list
+  with_items: "{{ ec2.tagged_instances }}"
+
+- debug: msg="{{ item.tags.Name }}"
+  with_items: "{{ ec2.tagged_instances }}"
+

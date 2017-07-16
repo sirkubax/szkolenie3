@@ -1,0 +1,2 @@
+- include: hostA.yml
+- include: finalize.yml

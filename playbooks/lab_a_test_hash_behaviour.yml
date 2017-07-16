@@ -1,0 +1,31 @@
+---
+#Uruchomienie:
+#~/szkolenie$ ansible-playbook playbooks/lab_a_test_hash_behaviour.yml
+#
+- hosts: localhost
+
+  #ta zmienna jest ustawiona globalnie dla calego playbooka (dostepna w kontekscie playbooka)
+  vars:
+    nasz_slownik:
+      x: 999
+ 
+
+  tasks:
+  - name: "Ustaw pierwszy fakt" 
+    set_fact:
+      nasz_slownik: 
+        a: 1
+  
+  - name: "Wypisz pierwszy fakt" 
+    debug: 
+        msg: "{{ nasz_slownik }}"
+  
+  - name: "Ustaw drugi fakt" 
+    set_fact:
+      nasz_slownik: 
+        b: 2
+        c: 3
+  
+  - name: "Wypisz drugi fakt" 
+    debug: msg="{{ nasz_slownik }}"
+

@@ -1,0 +1,22 @@
+- name: install python 2
+  raw: bash -c "test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)"
+  become: true
+
+- name: Gather facts
+  action: ec2_facts
+
+- name: Fix 'Could not load host key /etc/ssh/ssh_host_ed25519_key'
+  shell: 'ssh-keygen -A'
+  become: true
+
+- name: update /etc/hosts
+  lineinfile: >
+      dest=/etc/hosts
+      line="{{ ansible_eth0['ipv4']['address'] }} {{ hostname }}"
+      regexp="^{{ ansible_eth0['ipv4']['address'] }}"
+  become: true
+
+- name: "set hostname"
+  hostname: name="{{ hostname }}"
+  become: true
+

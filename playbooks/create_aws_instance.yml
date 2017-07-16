@@ -1,0 +1,210 @@
+###
+# EXAMPLE
+#     ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=apache01 role=apache disk=10 location=london" -vvv
+#
+# SMALL
+#     ansible-playbook create_aws_instance.yml -e "hostname=nfsserver202 type=t2.small role=nfs"
+# MORE
+#     ansible-playbook create_aws_instance.yml -e "hostname=nfsserver202 type=t2.small role=nfs disk=100 ami=ami-accff2b1" ....
+#
+# OPTIONS:
+#       location:   [irland, frankfurt] - the default location variables
+#       region: [eu-west-2, eu-west-1] - the region
+#       key:    [kuba_aws, kuba_id, your_key_name ] - the key for instance creation
+#       sg:     [default, private-dmz,..] - security group (per region!)
+#       type:   [t2.small, ...] - instance type
+#       ami:    [] - aws image type
+#       subnet: [] - subnet in AWS - important for zone selection
+#       hostname: the instance hostname (would be false, if count > 1)
+#  role:    - the machine role (not used right now)
+#  disk:    [X GB] - size of root disk in GB
+#  diskB:    [X GB] - size of secondary disk in GB
+#  delete_disk: [true, false] - should we keep the disk on the instance termination
+#  ssh_key: ssh key to initialize machine on first run (full name of aws creation key)
+#
+###
+
+#############################
+# Part 1:                   #
+# Create instances          #
+#############################
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  vars:
+  - vars_files_var: ["vars/{{ location }}.yml", "vars/location_default.yml"] #Name of the region: irland, frankfurt, etc...
+
+  tasks:
+
+      - include_vars: "{{ item }}"
+        with_first_found: "{{ vars_files_var }}"
+
+      - ec2_remote_facts:
+          region: "{{ region | default('eu-west-2') }}"
+          filters:
+            "tag:Name": "{{ hostname }}"
+        register: with_same_hostname
+      - assert:
+          that:
+            - "with_same_hostname.instances | length == 0"
+          msg: "Can't create host with same name"
+      - ec2_remote_facts:
+          region: "{{ region | default('eu-west-2') }}"
+          filters:
+            instance-state-name: running
+            "tag:Name": "0-state"
+        register: in_0_state
+      - assert:
+          that:
+            - "in_0_state.instances | length == 0"
+            - "with_same_hostname.instances | length == 0"
+          msg: "There is host in 0-state in {{ region | default('eu-west-2') }}"
+
+      - name: Provision a set of instances
+        ec2:
+            region: "{{ region | default('eu-west-2') }}"
+            key_name: "{{ key | default('kuba_aws') }}"
+            group: "{{ sg | default('default') }}"
+            instance_type: "{{ type | default('t2.nano') }}"
+            image: "{{ ami | default('ami-47a23a30') }}"
+            vpc_subnet_id: "{{ subnet | default('subnet-97f033fe') }}"
+            wait: yes
+            exact_count: 1
+            count_tag:
+                state_tag: initial
+            instance_tags:
+                Name: 0-state
+                state_tag: initial
+                allow_change: True
+                location: "{{ location |default('london') }}"
+                role: "{{ role | default('empty') }}"
+            volumes:
+                - device_name: /dev/sda1
+                  device_type: gp2
+                  volume_size: "{{ disk | default(11) }}"
+                  delete_on_termination: "{{ delete_disk | default(True) }}"
+                - device_name: /dev/sdb
+                  device_type: gp2
+                  volume_size: "{{ diskB | default(0) }}"
+                  delete_on_termination: "{{ delete_disk | default(True) }}"
+                  #iops: 50
+            assign_public_ip: "{{ assign_public_ip | default(False) }}"
+        register: ec2
+
+      - name: Check state tag
+        debug: msg="state tag initial in one or more instances, SKIPPING"
+        when: "{{ ec2.instances | length }} == 0 "
+
+      - name: Add instances to host group
+        local_action: add_host hostname={{ item.private_ip }} groupname=temp_group
+        when: item.public_ip is not defined
+        with_items: "{{ ec2.instances }}"
+
+      - name: Add instances to host group
+        local_action: add_host hostname={{ item.public_ip }} groupname=temp_group
+        when: item.public_ip is defined
+        with_items: "{{ ec2.instances }}"
+
+      - name: List new instances
+        local_action: debug var={{ item }}
+        with_items: "{{ ec2.instances }}"
+
+
+#########################################
+# Part 2:
+# Apply tasks to tagged instances
+#########################################
+
+- hosts: temp_group
+  become: false
+  gather_facts: false
+
+  vars:
+  - vars_files_var: ["vars/{{ location }}.yml", "vars/location_default.yml"] #Name of the region: irland, frankfurt, etc...
+
+  pre_tasks:
+    - include_vars: "{{ item }}"
+      with_first_found: "{{ vars_files_var }}"
+
+    - name: Set correct ssh key path
+      set_fact:
+        ansible_ssh_private_key_file: "{{ ssh_key }}"
+      when: ssh_key is defined
+
+    - name: Remove previous known_hosts "1 Are you sure you want to continue connecting (yes/no)?" query
+      local_action: shell ssh-keygen -f ~/.ssh/known_hosts -R {{ item }}
+      run_once: True
+      with_items: "{{ play_hosts }}"
+
+#zakomentuj ta linie i zobacz co sie stanie :)
+    - name: Wait for instances to listen on port 22
+      local_action: wait_for state=started host={{ inventory_hostname }} port=22 timeout=150 delay=15
+
+    - name: Ass public key to known_hosts "2 Are you sure you want to continue connecting (yes/no)?" query
+      local_action: command sh -c 'ssh-keyscan {{ item }} >>$HOME/.ssh/known_hosts >> ~/.ssh/known_hosts'
+      run_once: True
+      with_items: "{{ play_hosts }}"
+
+    - name: install python 2
+      raw: bash -c "test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)"
+      become: true
+
+- hosts: temp_group
+  become: false
+  gather_facts: True
+
+  vars:
+  - vars_files_var: ["vars/{{ location }}.yml", "vars/location_default.yml"] #Name of the region: irland, frankfurt, etc...
+    ssh_known_hosts_file: "/etc/ssh/ssh_known_hosts"
+
+  roles:
+      - { role: sys_pre_init_aws }
+
+#########################################
+# Part 3:
+# Apply roles to tagged instances
+#########################################
+
+- hosts: temp_group
+  become: true
+  gather_facts: True
+
+  roles:
+      - { role: sys_manage_keys }
+      - sys_debug
+      - sys_init_common
+
+#########################################
+# Part 3:
+# Apply final tasks to tagged instances
+# change tags
+#########################################
+
+- hosts: temp_group
+  gather_facts: False
+  connection: local
+
+  tasks:
+    - name: Change tags
+      ec2_tag: resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }}
+      args:
+          tags:
+              state_tag: prepared
+              Name: "{{ hostname }}"
+      delegate_to: localhost
+      when: ec2_url is not defined
+
+    - name: Change tags
+      ec2_tag: resource={{ ansible_ec2_instance_id }} ec2_url=https://ec2.eu-west-2.amazonaws.com
+      args:
+          tags:
+              state_tag: prepared
+              Name: "{{ hostname }}"
+      delegate_to: localhost
+      when: ec2_url is defined
+
+    - name: Get rid of SSH "Are you sure you want to continue connecting (yes/no)?" query
+      local_action: command sh -c 'ssh-keyscan -t rsa {{ item }} >>$HOME/.ssh/known_hosts'
+      with_items: "{{ play_hosts }}"

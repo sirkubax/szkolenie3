@@ -1,0 +1,75 @@
+
+#ami:  ami-accff2b1
+ami: ami-f1d7c395
+region: eu-west-2
+ansible_ssh_private_key_file: ~/.ssh/szkolenie_05_london.pem
+#ssh_key: '~/.ssh/so1securefr.prv' #Your ssh key that is used to create the instance
+location: london
+
+role: mgmt
+
+env_name: 'szkolenie'
+
+#allow change VPC (routing)
+allow_vpc_change: True
+
+# VPC
+szkolenie_vpc: 
+    vpc:
+        name: szkolenie
+        cidr_block: 10.218.0.0/22
+        subnets:
+          - cidr: 10.218.0.0/24
+            resource_tags:
+                Name: szkolenie_pub
+    route:
+      - subnets:
+          - 10.218.0.0/24
+        routes:
+          - dest: 0.0.0.0/0
+            gw: igw
+        resource_tags:
+          Name:  szkolenie default route
+
+    security_groups:
+        name: szkolenie-security-group
+        description: szkolenie SG
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 89.70.92.47/32
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 87.206.148.14/32
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 89.70.92.163/32
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 89.70.90.8/32
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 212.67.156.30/32   #muszynski homeA
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 10.218.0.0/24 
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 52.56.207.120/32 #mgmt 
+          - proto: icmp
+            from_port: -1
+            to_port: -1
+            cidr_ip: 0.0.0.0/0
+    ec2_eip:
+        instance_A:
+          tag: 1A
+          ip: 52.56.207.120
+          name: 'mgmt-server'
+    instance_group: szkolenie1

@@ -1,0 +1,74 @@
+---
+  - name: update cache 
+    apt: update_cache=yes cache_valid_time=7200
+    changed_when: False
+
+  - name: install packages
+    apt: name={{ item }}
+    with_items:
+    - vim
+    - screen  
+    - python-flake8
+    - ctags
+    - htop
+    - sysstat
+    - git
+    - sshfs
+    - curl
+    - tree
+    - python-boto #for s3 files fetching
+    - python-virtualenv #ansible
+    - python-pip #ansible
+    - libpq-dev #ansibl
+    - python-all-dev #ansible
+    - whois #ansible
+    - libffi-dev #ansible
+    - unzip
+    #    - iproute2
+    #    - pv
+    #    - iotop
+    #    - ntp
+    #    - iftop
+    #    - etckeeper
+    #    - rkhunter
+    #    - fail2ban #sshd jail could be changed
+    #    - nload
+    #    - lvm2
+
+    #  - name: install packages
+    #    apt: 
+    #      name: "{{ item }}"
+    #      install_recommends: No
+    #    with_items:
+    #      - nagios-nrpe-server
+    #      - nagios-nrpe-plugin
+    #      - nagios-plugins
+    #      - nagios-plugins-basic
+    #      - nagios-plugins-common
+    #      - nagios-plugins-standard
+    #      - nagios-plugins-extra
+
+  - name: init vim/screen
+    unarchive: src={{ playbook_dir }}/../opt/my_env.tgz dest=~/
+
+  - name: upload /etc/timezone
+    copy: src=timezone dest=/etc/timezone
+
+  - name: upload /etc/localtimev
+    copy: src=localtime dest=/etc/localtime
+
+  - name: symlink to default editor
+    file: src=/usr/bin/vim dest=/etc/alternatives/editor state=link
+  
+  - name: "set locale"
+    lineinfile: >
+        dest=/etc/environment
+        line="LC_ALL=en_US.UTF-8"
+        regexp="LC_ALL*"
+
+  - name: "set locale"
+    lineinfile: >
+        dest=/etc/environment
+        line="LANGUAGE=en_US.UTF-8"
+        regexp="LANGUAGE*"
+
