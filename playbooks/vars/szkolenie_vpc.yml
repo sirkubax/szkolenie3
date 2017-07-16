@@ -6,9 +6,9 @@ ansible_ssh_private_key_file: ~/.ssh/szkolenie_05_london.pem
 #ssh_key: '~/.ssh/so1securefr.prv' #Your ssh key that is used to create the instance
 location: london
 
-role: mgmt
+role: mgmtszkolenie
 
-env_name: 'szkolenie'
+env_name: 'szkolenie3'
 
 #allow change VPC (routing)
 allow_vpc_change: True
@@ -16,24 +16,24 @@ allow_vpc_change: True
 # VPC
 szkolenie_vpc: 
     vpc:
-        name: szkolenie
-        cidr_block: 10.218.0.0/22
+        name: szkolenie3
+        cidr_block: 10.238.0.0/22
         subnets:
-          - cidr: 10.218.0.0/24
+          - cidr: 10.238.0.0/24
             resource_tags:
-                Name: szkolenie_pub
+                Name: szkolenie3_pub
     route:
       - subnets:
-          - 10.218.0.0/24
+          - 10.238.0.0/24
         routes:
           - dest: 0.0.0.0/0
             gw: igw
         resource_tags:
-          Name:  szkolenie default route
+          Name:  szkolenie3 default route
 
     security_groups:
-        name: szkolenie-security-group
-        description: szkolenie SG
+        name: szkolenie3-security-group
+        description: szkolenie3 SG
         rules:
           - proto: tcp
             from_port: 22
@@ -70,6 +70,6 @@ szkolenie_vpc:
     ec2_eip:
         instance_A:
           tag: 1A
-          ip: 52.56.207.120
-          name: 'mgmt-server'
-    instance_group: szkolenie1
+          ip: 35.176.206.110
+          name: 'mgmtszkolenie-server'
+    instance_group: szkolenie31

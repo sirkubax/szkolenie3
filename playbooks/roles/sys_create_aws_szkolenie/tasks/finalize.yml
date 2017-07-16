@@ -15,13 +15,13 @@
       exact_count: "{{ count | default(1) }}"
       source_dest_check: "{{ source_dest_check | default(True) }}"
       count_tag:
-          role: "{{ host_role | default('szkolenie') }}"
+          role: "{{ host_role | default('mgmtszkolenie') }}"
           instance_group: "{{ generic_vpc.instance_group }}"
       instance_tags:
           counter: szkolenie-{{env_name}}
           allow_change: True
           location: "{{ location |default('london') }}"
-          role: "{{ host_role | default('szkolenie') }}"
+          role: "{{ host_role | default('mgmtszkolenie') }}"
       volumes:
           - device_name: /dev/sda1
             device_type: gp2
