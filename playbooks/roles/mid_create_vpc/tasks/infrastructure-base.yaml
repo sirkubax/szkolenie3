@@ -1,4 +1,22 @@
   - debug: msg="{{ generic_vpc }}"
+  - debug: msg="{{ generic_vpc.security_groups.rules }}"
+  - debug: msg="{{ pub_ip }}"
+  
+  - set_fact: 
+      my_pub_ip_SG_rule:
+        - proto: tcp                                                      
+          from_port: 22                                                   
+          to_port: 22                                                     
+          cidr_ip: "{{ pub_ip.ansible_facts.ipify_public_ip }}/32"
+  
+  - debug: msg="{{ my_pub_ip_SG_rule }}"
+  - set_fact: 
+        security_groups_whatismyip:
+          rules: "{{ generic_vpc.security_groups.rules + my_pub_ip_SG_rule }}"
+  - debug: msg="{{ security_groups_whatismyip }}"
+  - debug: msg="{{ generic_vpc }}"
+
+
 
   - name: Check szkolenie VPC existence
     ec2_vpc:
@@ -36,4 +54,4 @@
         vpc_id: "{{ vpc_id |default(vpc.vpc_id) }}"
         region: "{{ region }}"
         rules:
-            "{{ generic_vpc.security_groups.rules }}"
+            "{{ security_groups_whatismyip.rules }}"

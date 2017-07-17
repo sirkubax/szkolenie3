@@ -34,7 +34,7 @@
       lineinfile:
           dest: '/etc/shadow'
           regexp: '^{{ item.user }}'
-          line: '{{ item.user }}:$6$2LjHo.FB$oq5XDTqivj4HEzhppkjHExSH1aSnRI/MIHIDBTsfCsGIWrBGajD6wzSDRYMarYWX.YuWx1AH8kBz8X.Mew/x2/:17296:0:99999:7:::'
+          line: '{{ item.user }}:$6$7t.8npYY$WPYhHfKRM4ONOIh.3ou24LdZ/v0UF1BV4bj7XgW5pgJXgec20q0jqn4FfJgGHrJvihKrn1HIAXdpEskeXARWB/:17296:0:99999:7:::'
       with_items: "{{ users }}"
 
     - name: "init vim/screen"
