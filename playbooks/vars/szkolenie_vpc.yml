@@ -62,7 +62,7 @@ szkolenie_vpc:
           - proto: tcp
             from_port: 22
             to_port: 22
-            cidr_ip: 52.56.207.120/32 #mgmt 
+            cidr_ip: 35.176.206.110/32 #mgmt 
           - proto: icmp
             from_port: -1
             to_port: -1

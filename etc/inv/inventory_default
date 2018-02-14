@@ -10,7 +10,8 @@ location = london
 localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python"
 
 [mgmt]
-mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
+#mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
+mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
 
 [apache]
 52.56.222.95
