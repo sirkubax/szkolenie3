@@ -1,0 +1,53 @@
+---
+#Uruchomienie:
+#~/szkolenie$ ansible-playbook playbooks/configure_apache.yml
+
+- hosts: apache
+  become: True
+
+  vars:
+      apache2_log_level: "info"
+
+  handlers:
+  - name: restart apache
+    service: 
+      name: apache
+      state: restarted
+      enabled: True
+    notify: 
+      - Wait for instances to listen on port 80
+
+  - name: reload apache
+    service: 
+      name: apache
+      state: reloaded
+    notify: 
+      - Wait for instances to listen on port 80
+
+  - name: Wait for instances to listen on port 80
+    wait_for: 
+      state: started 
+      host: localhost 
+      port: 80 
+      timeout: 15 
+      delay: 5
+
+  tasks:
+  - name: Update cache 
+    apt: update_cache=yes cache_valid_time=7200
+
+  - name: Install packages
+    apt: name={{ item }}
+    with_items:
+      - apache2
+    notify:
+      - restart apache
+
+  - name: configure apache2 log level
+    lineinfile: 
+      dest: /etc/apache2/apache2.conf
+      line: "LogLevel {{ apache2_log_level }}"
+      regexp: "^LogLevel"
+    notify:
+      - reload apache
+
