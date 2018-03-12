@@ -14,9 +14,8 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
 
 [apache]
-#35.177.183.219
-#35.178.82.127
-mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
+35.178.124.125
+35.178.107.164
 
 [backend]
 

@@ -1,6 +1,6 @@
 ami: ami-f1d7c395
 region: eu-west-2
-subnet: subnet-65d8611e
+subnet: subnet-b516cbce
 sg: szkolenie3-security-group
 key: szkolenie_05_london
 ansible_ssh_private_key_file: '~/.ssh/szkolenie_05_london.pem'
