@@ -1,0 +1,1 @@
+ansible -m  nasz_modul all -a 'name=szkolenie'
