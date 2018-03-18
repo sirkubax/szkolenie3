@@ -1,6 +1,5 @@
 ---
 - hosts: apache
-  become: True
 
   vars:
       vars_files_var: ["vars/szkolenie.yml", "vars/szkolenie_vault.yml"]
@@ -12,6 +11,8 @@
   tasks:
     - name: "show time"
       shell: date
+
+  #please examint the dictionary - output of known facts from sys_debug 
 
   roles:
     - sys_debug

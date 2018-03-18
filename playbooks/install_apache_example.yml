@@ -3,7 +3,6 @@
 #~/szkolenie$ ansible-playbook playbooks/configure_apache.yml
 
 - hosts: apache
-  become: True
 
   vars:
       apache2_log_level: "info"
@@ -16,6 +15,7 @@
       enabled: True
     notify: 
       - Wait for instances to listen on port 80
+    become: True
 
   - name: reload apache
     service: 
@@ -23,6 +23,7 @@
       state: reloaded
     notify: 
       - Wait for instances to listen on port 80
+    become: True
 
   - name: Wait for instances to listen on port 80
     wait_for: 
@@ -35,6 +36,7 @@
   tasks:
   - name: Update cache 
     apt: update_cache=yes cache_valid_time=7200
+    become: True
 
   - name: Install packages
     apt: name={{ item }}
@@ -42,6 +44,7 @@
       - apache2
     notify:
       - restart apache
+    become: True
 
   - name: configure apache2 log level
     lineinfile: 
@@ -50,4 +53,5 @@
       regexp: "^LogLevel"
     notify:
       - reload apache
+    become: True
 

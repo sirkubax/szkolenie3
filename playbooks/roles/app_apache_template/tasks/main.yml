@@ -6,7 +6,7 @@
   template:
     src: "vhosts.conf"
     dest: "~/vhosts.conf"
-    owner: root
-    group: root
+    #owner: root
+    #group: root
     mode: 0644
   #notify: restart apache
