@@ -17,5 +17,6 @@
 
   roles:
     - sys_debug
-#    - { role: apache2 }
+  # - { role: sys_init_common, become: True, when: "inventory_hostname == groups['apache'][0]" }
+  #    - { role: apache2 }
 
