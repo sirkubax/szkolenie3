@@ -10,7 +10,7 @@
   handlers:
   - name: restart apache
     service: 
-      name: apache
+      name: apache2
       state: restarted
       enabled: True
     notify: 
@@ -19,7 +19,7 @@
 
   - name: reload apache
     service: 
-      name: apache
+      name: apache2
       state: reloaded
     notify: 
       - Wait for instances to listen on port 80

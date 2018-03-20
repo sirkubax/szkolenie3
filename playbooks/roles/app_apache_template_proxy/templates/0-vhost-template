@@ -1,4 +1,3 @@
-#under mid_apache_so1_proxy control
 <VirtualHost *:{{ item_instance.port | default(80) }}>
         ServerName {{ item_instance.servername }}
 {% if item_instance.serveralias is defined and item_instance.serveralias|length > 0 %}
