@@ -1,0 +1,21 @@
+#under mid_apache_so1_proxy control
+<VirtualHost *:{{ item_instance.port | default(80) }}>
+        ServerName {{ item_instance.servername }}
+{% if item_instance.serveralias is defined and item_instance.serveralias|length > 0 %}
+{% for item in item_instance.serveralias %}
+        ServerAlias {{ item }}
+{% endfor %}
+{% endif %}
+
+        LogLevel {{ item_instance.loglvl |default('warn') }}
+        ErrorLog /var/log/apache2/{{ item_instance.servername }}-error.log
+        CustomLog /var/log/apache2/{{ item_instance.servername }}-access.log combined
+
+        {{ item_instance.staticpart }}
+
+{% for proxy in item_instance.proxy_set %}
+        ProxyPass {{ proxy.uri_match }} {{ proxy.dest }}
+        ProxyPassReverse {{ proxy.uri_match }} {{ proxy.dest }}
+{% endfor %}
+
+</VirtualHost>

@@ -1,0 +1,32 @@
+---
+- name: "APP_APACHE_PROXY | Install apache2"
+  apt: name="{{ item }}" state=present
+  with_items:
+    - apache2
+
+- name: "APP_APACHE_PROXY | Upload Static vhosts"
+  template: src=0-vhost-template dest=/etc/apache2/sites-available/{{ item_instance.servername }}.conf
+  with_items: "{{ vhosts_set }}"
+  loop_control:
+    loop_var: item_instance
+  notify:
+    - reload apache2
+
+- name: "APP_APACHE_PROXY | a2enmod for our configs"
+  apache2_module: name={{ item }} state=present
+  with_items:
+    - rewrite
+    - headers
+    - expires
+    - proxy
+  notify:
+    - restart apache2
+
+- name: "APP_APACHE_SO1_PROXY | a2ensite for our configs"
+  command: a2ensite {{ item.servername }}
+  args:
+    creates: /etc/apache2/sites-enables/{{ item }}.conf
+  with_items: 
+    - "{{ vhosts_set }}"
+  notify:
+    - reload apache2

@@ -1,0 +1,14 @@
+apache_conf_path: /etc/apache2
+apache_listen_ip: 0.0.0.0
+apache_listen_port: 80
+vhost:
+    servername: 'moja_nazwa'
+    documentroot: /var/www/
+
+vhosts_set:
+  - servername: chmurowisko.przyklad.pl
+    serveralias: [ch.przyklad.net]
+    staticpart: 'RequestHeader set Host chmurowisko.przyklad.pl'
+    proxy_set:
+      - uri_match: '/chmurka'
+        dest: 'http://ch.przyklad.net/ansible/'
