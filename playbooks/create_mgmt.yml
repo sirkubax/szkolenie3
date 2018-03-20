@@ -10,13 +10,19 @@
   gather_facts: false
 
   vars:
-  - vars_files_var: ["vars/szkolenie_vpc.yml"]
+  - vars_files_var: ["vars/szkolenie_vpc_webinar.yml"]
 
   pre_tasks:
       - include_vars: "{{ item }}"
         with_first_found: "{{ vars_files_var }}"
       - set_fact:
           generic_vpc: "{{ szkolenie_vpc }}"
+      - name: get my public IP
+        ipify_facts:
+          api_url: http://api.ipify.org
+        register: pub_ip
+      - debug: msg="{{ pub_ip }}"
+
 
   roles:
       - { role: mid_create_vpc }
@@ -31,7 +37,7 @@
   gather_facts: False
 
   vars:
-  - vars_files_var: ["../../../vars/szkolenie_vpc.yml"]
+  - vars_files_var: ["../../../vars/szkolenie_vpc_webinar.yml"]
 
   roles:
       - { role: sys_create_aws_szkolenie, source_dest_check: False }
@@ -46,7 +52,7 @@
   gather_facts: False
 
   vars:
-  - vars_files_var: ["vars/szkolenie_vpc.yml"]
+  - vars_files_var: ["vars/szkolenie_vpc_webinar.yml"]
 
   pre_tasks:
       - include_vars: "{{ item }}"
@@ -91,7 +97,7 @@
   gather_facts: False
 
   vars:
-  - vars_files_var: ["vars/szkolenie_vpc.yml"]
+  - vars_files_var: ["vars/szkolenie_vpc_webinar.yml"]
 
   pre_tasks:
       - include_vars: "{{ item }}"

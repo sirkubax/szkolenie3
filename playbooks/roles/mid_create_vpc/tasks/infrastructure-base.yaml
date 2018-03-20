@@ -4,9 +4,9 @@
   
   - set_fact: 
       my_pub_ip_SG_rule:
-        - proto: tcp                                                      
-          from_port: 22                                                   
-          to_port: 22                                                     
+        - proto: tcp
+          from_port: 22
+          to_port: 22
           cidr_ip: "{{ pub_ip.ansible_facts.ipify_public_ip }}/32"
   
   - debug: msg="{{ my_pub_ip_SG_rule }}"
