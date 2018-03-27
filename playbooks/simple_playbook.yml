@@ -1,0 +1,7 @@
+- hosts: all
+
+  tasks: 
+  - ping:
+
+  - name: "wykonaj modul shell"
+    shell: date; whoami

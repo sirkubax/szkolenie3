@@ -64,6 +64,15 @@
 
 
   tasks:
+      - name: Wait for instances to listen on port 22
+        wait_for:
+            state: started 
+            host: "{{ inventory_hostname }}"
+            port: 22 
+            timeout: 150 
+            delay: 5
+        delegate_to: localhost
+
       - name: install python 2
         raw: bash -c "test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)"
         become: true
