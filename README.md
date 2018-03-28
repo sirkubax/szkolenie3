@@ -61,10 +61,12 @@ run the `ping` module on `localhost`.
 
 =======
 # szkolenie
-WDI presentation:
+WDI presentation:  
 https://docs.google.com/presentation/d/1-be6l1JeTCZ7qcuQnppoPTF89zx9Lpl2PlXbaf4Sa1U 
-My recent article:
+
+My recent article:  
 https://chmurowisko.pl/ansible-wystartuj-infrastructure-as-code-30-sekund-dziecinnie-proste/
-Recent webinar:
+
+Recent webinar:  
 https://www.youtube.com/watch?v=NjNZLBGmdaI
 
