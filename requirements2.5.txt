@@ -1,0 +1,16 @@
+#git+git://github.com/ansible/ansible.git@stable-2.2
+#https://releases.ansible.com/ansible/ansible-2.4.0.0-0.5.rc5.tar.gz
+#https://releases.ansible.com/ansible/ansible-v2.5.0b1.tar.gz
+https://github.com/ansible/ansible/archive/v2.5.0b1.tar.gz
+boto
+SQLAlchemy
+psycopg2
+passlib
+requests
+boto3
+google-api-python-client
+httplib2
+packaging
+msrestazure
+azure-cli
+ansible[azure]

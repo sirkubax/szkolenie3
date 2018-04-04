@@ -60,6 +60,13 @@ If all is working, you should see some output that indicates ansible was able to
 run the `ping` module on `localhost`.
 
 =======
+
+Azure
+----
+Please refere to this [guide](http://docs.ansible.com/ansible/latest/scenario_guides/guide_azure.html) on how to setup Azure credentials   
+Storing in file is one of the metods ( $HOME/.azure/credentials )
+
+=======
 # szkolenie
 WDI presentation:  
 https://docs.google.com/presentation/d/1-be6l1JeTCZ7qcuQnppoPTF89zx9Lpl2PlXbaf4Sa1U 
