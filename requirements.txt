@@ -1,4 +1,4 @@
 #git+git://github.com/ansible/ansible.git@stable-2.2
-https://releases.ansible.com/ansible/ansible-2.2.1.0.tar.gz
+https://releases.ansible.com/ansible/ansible-2.4.1.0.tar.gz
 boto==2.46.1
 boto3==1.4.4
