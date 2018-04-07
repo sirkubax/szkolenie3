@@ -5,10 +5,10 @@
     - apache2
 
 - name: "APP_APACHE_PROXY | Upload Static vhosts"
-  template: src=0-vhost-template dest=/etc/apache2/sites-available/{{ item_instance.servername }}.conf
+  template: 
+      src: 0-vhost-template 
+      dest: /etc/apache2/sites-available/{{ item.servername }}.conf
   with_items: "{{ vhosts_set }}"
-  loop_control:
-    loop_var: item_instance
   notify:
     - reload apache2
 
@@ -30,3 +30,4 @@
     - "{{ vhosts_set }}"
   notify:
     - reload apache2
+

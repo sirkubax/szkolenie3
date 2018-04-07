@@ -5,7 +5,7 @@
 - hosts: apache
 
   vars:
-      apache2_log_level: "info"
+      apache2_log_level: "warn"
 
   handlers:
   - name: restart apache
@@ -46,12 +46,22 @@
       - restart apache
     become: True
 
-  - name: configure apache2 log level
-    lineinfile: 
-      dest: /etc/apache2/apache2.conf
-      line: "LogLevel {{ apache2_log_level }}"
-      regexp: "^LogLevel"
+  #  - name: configure apache2 log level
+  #    lineinfile: 
+  #      dest: /etc/apache2/apache2.conf
+  #      line: "LogLevel {{ apache2_log_level }}"
+  #      regexp: "^LogLevel"
+  #    notify:
+  #      - reload apache
+  #    become: True
+  #
+  - name: 'wgraj apache2.conf jako template'
+    template:
+        src: apache2.conf
+        dest: /etc/apache2/apache2.conf
     notify:
       - reload apache
     become: True
+    backup: True
+
 

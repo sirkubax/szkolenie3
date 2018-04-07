@@ -2,22 +2,30 @@
 - hosts: apache
 
   vars:
-      moj_user: szkolenie17
-
+      #moj_user: szkolenie17
+      moj_user: "{{ lookup('pipe', 'whoami') }}"
+ 
   tasks:
     - name: "utworz directory"
       file:
           path: "~/stworzmnie{{ moj_user }}"
           state: directory 
-
+ 
     - name: "sprawdz czy plik isnieje"
       stat:
         path: "~/stworzmnie{{ moj_user }}"
       register: zmienna
-
+ 
     - name: "utworz plik jesli nie isnieje"
-      file:
-          path: "~/stworzmnie{{ moj_user }}/plik"
-          state: touch
       when: not zmienna.stat.exists
+      file:
+        path: "~/stworzmnie{{ moj_user }}/plik"
+        state: touch
+      register: zapiszdotejzmiennej
+      tags:
+          - wykonajtylkoto
+ 
+- hosts: backend
 
+  tasks: 
+   - ping:

@@ -1,18 +1,18 @@
-<VirtualHost *:{{ item_instance.port | default(80) }}>
-        ServerName {{ item_instance.servername }}
-{% if item_instance.serveralias is defined and item_instance.serveralias|length > 0 %}
-{% for item in item_instance.serveralias %}
-        ServerAlias {{ item }}
+<VirtualHost *:{{ item.port | default(80) }}>
+        ServerName {{ item.servername }}
+{% if item.serveralias is defined and item.serveralias|length > 0 %}
+{% for kopytko in item.serveralias %}
+        ServerAlias {{ kopytko }}
 {% endfor %}
 {% endif %}
 
-        LogLevel {{ item_instance.loglvl |default('warn') }}
-        ErrorLog /var/log/apache2/{{ item_instance.servername }}-error.log
-        CustomLog /var/log/apache2/{{ item_instance.servername }}-access.log combined
+        LogLevel {{ item.loglvl |default('warn') }}
+        ErrorLog /var/log/apache2/{{ item.servername }}-error.log
+        CustomLog /var/log/apache2/{{ item.servername }}-access.log combined
 
-        {{ item_instance.staticpart }}
+        {{ item.staticpart }}
 
-{% for proxy in item_instance.proxy_set %}
+{% for proxy in item.proxy_set %}
         ProxyPass {{ proxy.uri_match }} {{ proxy.dest }}
         ProxyPassReverse {{ proxy.uri_match }} {{ proxy.dest }}
 {% endfor %}
