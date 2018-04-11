@@ -1,0 +1,30 @@
+galaxy_info:
+  author: Bjorn Oscarsson
+  description: "Installs and configures Docker Community Edition (CE)"
+  min_ansible_version: 2.3
+  license: MIT
+  platforms:
+  - name: Fedora
+    versions:
+      - 24
+      - 25
+      - 26
+
+  - name: EL
+    versions:
+      - 7
+
+  - name: Debian
+    versions:
+      - jessie
+      - stretch
+
+  - name: Ubuntu
+    versions:
+      - trusty
+      - xenial
+
+  galaxy_tags:
+    - docker
+
+dependencies: []

@@ -26,7 +26,7 @@
               direction: Inbound
             - name: vpn
               protocol: Udp
-              destination_port_range: 1194
+              destination_port_range: 80
               access: Allow
               priority: 1002
               direction: Inbound
@@ -38,12 +38,6 @@
               access: Allow
               priority: 1001
               direction: Inbound
-            - name: vpn
-              protocol: Udp
-              destination_port_range: 1194
-              access: Allow
-              priority: 1002
-              direction: Inbound
           - name: azu-eu-west-eco-sql-sg
             rules:
             - name: SSH
@@ -51,12 +45,6 @@
               destination_port_range: 22
               access: Allow
               priority: 1001
-              direction: Inbound
-            - name: vpn
-              protocol: Udp
-              destination_port_range: 1194
-              access: Allow
-              priority: 1002
               direction: Inbound
 
         vm:

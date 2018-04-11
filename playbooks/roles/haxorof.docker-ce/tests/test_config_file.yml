@@ -1,0 +1,8 @@
+---
+- hosts: test-host
+  vars:
+    docker_daemon_config_file: "files/daemon.json"
+    docker_daemon_config:
+      shall_skip_this: true
+  roles:
+    - ansible-role-docker-ce

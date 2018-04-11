@@ -1,0 +1,46 @@
+- hosts: azure
+
+  roles:
+    - role: sys_init_common
+      become: True
+    - role: sys_manage_keys
+      become: True
+    - role: haxorof.docker-ce
+      become: True
+
+  tasks: 
+    - name: install packages
+      apt: name={{ item }}
+      with_items:
+      - docker-compose
+
+    - name: install packages
+      shell: usermod -a -G docker ubuntu
+
+    - name: clone repo
+      repo: 'https://github.com/ecotest-jm/devops-take-home.git'
+      dest: devops-take-home
+
+    - name: upload app template
+      template:
+        src: "{{ item }}"
+        dest: "devops-take-home/backend/app/{{ item }}"
+      with_items:
+        - appsettings.Development.json
+        - appsettings.json
+      vars:
+        db:
+            user: SA
+            password: Testing123
+            mssql_host: mssql2
+        log_level: Debug
+
+
+    - name: build containers
+      shell: cd devops-take-home; docker-compose build
+
+    - name: run containers
+      shell: cd devops-take-home; docker-compose up -d
+
+    - name: initialize sql
+      shell: docker exec  -ti mssql2 bash /importsql.sh

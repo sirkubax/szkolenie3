@@ -1,0 +1,50 @@
+---
+- hosts: test-host
+  tasks:
+    - package:
+        name: "{{ item }}"
+        state: present
+      become: true
+      with_items:
+        - git
+        - parted
+
+    - name: Ensure Docker Bench Security is cloned
+      git:
+        repo: 'https://github.com/docker/docker-bench-security.git'
+        dest: /home/vagrant/docker-bench-security
+
+    - name: Create partition sdb1
+      parted:
+        device: /dev/sdb
+        number: 1
+        flags: [ lvm ]
+        part_end: 1GiB
+        state: present
+      become: true
+    - name: Create partition sdb2
+      parted:
+        device: /dev/sdb
+        number: 2
+        flags: [ lvm ]
+        part_start: 1GiB
+        state: present
+      become: true
+    - name: Ensure file system is EXT4 for /dev/sdb1
+      filesystem:
+        fstype: ext4
+        dev: /dev/sdb1
+      become: true
+    - name: Ensure /var/lib/docker directory exists
+      file:
+        path: /var/lib/docker
+        state: directory
+      become: true
+    - name: Ensure /var/lib/docker is mounted
+      mount:
+        path: /var/lib/docker
+        src: /dev/sdb1
+        fstype: ext4
+        state: mounted    
+      become: true
+   

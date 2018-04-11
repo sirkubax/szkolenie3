@@ -23,3 +23,6 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
 [prod:children]
 apache
 backend
+
+[azure]
+51.144.167.43 ansible_ssh_private_key_file=~/.ssh/id_rsa.kub
