@@ -19,6 +19,7 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
 35.178.121.103
 
 [backend]
+35.176.197.248
 
 [prod:children]
 apache
