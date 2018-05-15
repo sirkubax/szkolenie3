@@ -25,7 +25,7 @@
 - name: "APP_APACHE_SO1_PROXY | a2ensite for our configs"
   command: a2ensite {{ item.servername }}
   args:
-    creates: /etc/apache2/sites-enables/{{ item }}.conf
+    creates: /etc/apache2/sites-enabled/{{ item.servername }}.conf
   with_items: 
     - "{{ vhosts_set }}"
   notify:
