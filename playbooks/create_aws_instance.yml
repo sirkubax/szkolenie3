@@ -149,7 +149,7 @@
       with_items: "{{ play_hosts }}"
 
     - name: install python 2 - apt-update
-      raw: bash -c "test -e /usr/bin/python || (apt-get update)"
+      raw: bash -c "test -e /usr/bin/python || (apt-get update; sleep 3)"
       become: true
       #ansible_ssh_user: ubuntu
       #remote_user: ubuntu
