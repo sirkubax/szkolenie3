@@ -28,6 +28,8 @@ backend
 
 #grupa loadbalancer
 [loadbalancer]
+35.177.159.71
 
 #grupa mysql
 [mysql]
+35.177.247.47

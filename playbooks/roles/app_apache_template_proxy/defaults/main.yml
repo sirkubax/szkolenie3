@@ -1,14 +1,12 @@
 apache_conf_path: /etc/apache2
 apache_listen_ip: 0.0.0.0
 apache_listen_port: 80
-vhost:
-    servername: 'moja_nazwa'
-    documentroot: /var/www/
 
 vhosts_set:
-  - servername: chmurowisko.przyklad.pl
-    serveralias: [ch.przyklad.net]
-    staticpart: 'RequestHeader set Host chmurowisko.przyklad.pl'
+  - servername: wp.twojadomena.pl
+    serveralias: [wp.innadomena.net]
+    staticpart: '#RequestHeader set Host wp.towjadomena.pl'
     proxy_set:
-      - uri_match: '/chmurka'
-        dest: 'http://ch.przyklad.net/ansible/'
+      - uri_match: '/'
+        dest: "http://{{ hostvars[groups['wordpress'][0]].ansible_default_ipv4.address }}/wordpress/"
+        #dest: "http://{{ hostvars[groups['wordpress'][0]].ansible_default_ipv4.address }}/"
