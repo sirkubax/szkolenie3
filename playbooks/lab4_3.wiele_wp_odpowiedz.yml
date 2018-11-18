@@ -1,0 +1,65 @@
+---
+- hosts: mysql
+  gather_facts: smart
+
+- hosts: wordpress
+  become: true
+  roles:
+  - oefenweb.wordpress
+  vars:
+    wordpress_installs:
+      - name: wordpress
+        dbname: "{{ hostvars[groups['mysql'][0]].mysql_databases[0].name }}"
+        dbuser: "{{ hostvars[groups['mysql'][0]].mysql_users[0].name }}"
+        dbpass: "{{ hostvars[groups['mysql'][0]].mysql_users[0].password }}"
+        dbhost: "{{ hostvars[groups['mysql'][0]].ansible_default_ipv4.address }}"
+        path: /var/www/html/wordpress
+        url: wp.twojadomena.pl
+        title: wordpress
+        admin_name: admin
+        admin_email: root@localhost.localdomain
+        admin_password: 'test1234'
+        themes:
+          - name: twentyseventeen
+            activate: true
+          - name: twentyseventeen
+        plugins:
+          - name: contact-form-7
+            activate: false
+          - name: simple-fields
+        users: {}
+        options: []
+        queries: []
+
+
+  pre_tasks:
+    - name: "instaluj pakiety"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - apache2
+        - php-curl
+        - php-gd 
+        - php-mbstring
+        - php-mcrypt
+        - php-xml
+        - php-xmlrpc
+        - libapache2-mod-php
+        - mysql-client
+        - php7.0-mysql
+
+    - name: "skonfiguruj apache"
+      blockinfile: 
+        path: /etc/apache2/apache2.conf
+        insertafter: "AccessFileName"
+        block: |
+           <Directory /var/www/html/wordpress>
+              Options FollowSymLinks
+              AllowOverride All
+           </Directory>
+
+    - name: "restart apache2"
+      service: 
+        name: apache2
+        state: restarted

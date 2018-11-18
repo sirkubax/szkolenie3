@@ -1,0 +1,30 @@
+<VirtualHost *:{{ item.port | default(80) }}>
+        ServerName {{ item.servername }}
+{% if item.serveralias is defined and item.serveralias|length > 0 %}
+{% for kopytko in item.serveralias %}
+        ServerAlias {{ kopytko }}
+{% endfor %}
+{% endif %}
+
+        LogLevel {{ item.loglvl |default('warn') }}
+        ErrorLog /var/log/apache2/{{ item.servername }}-error.log
+        CustomLog /var/log/apache2/{{ item.servername }}-access.log combined
+
+        {{ item.staticpart }}
+
+        #Header add Set-Cookie “ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/” env=BALANCER_ROUTE_CHANGED 
+
+        <Proxy balancer://{{ item.nazwa_balancera }}>
+{% for host in item.hosty_wp %}
+            BalancerMember http://{{ hostvars[host].ansible_default_ipv4.address }}:80 route=http{{ loop.index }}
+{% endfor %}
+            ProxySet lbmethod=byrequests
+        </Proxy>
+
+
+{% for proxy in item.proxy_set %}
+        ProxyPass {{ proxy.uri_match }} balancer://{{ item.nazwa_balancera }}/{{ proxy.dest }}
+        ProxyPassReverse {{ proxy.uri_match }} balancer://{{ item.nazwa_balancera }}/{{ proxy.dest }}
+{% endfor %}
+
+</VirtualHost>
