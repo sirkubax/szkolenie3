@@ -25,6 +25,7 @@ backend
 #grupa wordpress
 [wordpress]
 35.177.247.47
+#3.8.8.38
 
 #grupa loadbalancer
 [loadbalancer]
