@@ -13,62 +13,13 @@
   roles:
     - { role: app_apache_template_proxy }
 
-  tasks: []
-#    - name: "sprawdz dostepnosc hostow"
-#      ping:
-#
-#    - name: "instaluj pakiety"
-#      apt:
-#        name: "{{ item }}"
-#        state: latest
-#      with_items:
-#        - apache2
-#        - php-curl
-#        - php-gd 
-#        - php-mbstring
-#        - php-mcrypt
-#        - php-xml
-#        - php-xmlrpc
-#        - libapache2-mod-php
-#
-#    - name: "aktywuj modul php"
-#      apache2_module:
-#          name: "php7.0"
-#          state: present
-#              
-#    - name: "pobierz najnowsze wydanie wodrpress bezposrednio do katalogu"
-#      get_url:
-#          url: "https://wordpress.org/latest.tar.gz"
-#          dest: /var/www/html/latest.tar.gz
-#
-#    - name: "rozpakuj archiwum wordpress"
-#      unarchive:
-#          src: /var/www/html/latest.tar.gz
-#          dest: /var/www/html/
-#          copy: False
-#          owner: www-data
-#          group: www-data
-#
-#    - name: "przyklad kopi pliku modulem shell"
-#      shell: "cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php"
-#
-#    - name: "przyklad kopi pliku modulem copy"
-#      copy: 
-#        src: /var/www/html/wordpress/wp-config-sample.php 
-#        dest: /var/www/html/wordpress/wp-config.php
-#        remote_src: yes
-#
-#    - name: "skonfiguruj apache"
-#      blockinfile: 
-#        path: /etc/apache2/apache2.conf
-#        insertafter: "AccessFileName"
-#        block: |
-#           <Directory /var/www/html/wordpress>
-#              Options FollowSymLinks
-#              AllowOverride All
-#           </Directory>
-#
-#    - name: "restart apache2"
-#      service: 
-#        name: apache2
-#        state: restarted
+  tasks: 
+    - name: "APP_APACHE_PROXY | a2enmod for our configs"
+      apache2_module: name={{ item }} state=present
+      with_items:
+        - proxy_http
+        - proxy_balancer
+        - lbmethod_byrequests
+      notify:
+        - restart apache2
+    

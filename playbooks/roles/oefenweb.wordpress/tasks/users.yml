@@ -1,0 +1,28 @@
+# tasks file for wordpress, users
+---
+- name: users | copy file
+  copy:
+    src: "{{ item.users.src }}"
+    dest: "{{ wordpress_data_path }}/users/{{ item.dbname }}.csv"
+    owner: root
+    group: root
+    mode: 0644
+  register: _check_copy_users
+  with_items: "{{ wordpress_installs }}"
+  when: item.users.src is defined
+  tags:
+    - wordpress-users-copy-file
+
+- name: users | install
+  command: >
+    wp-cli user import-csv
+    --allow-root --no-color --path='{{ item.item.path }}'
+    {{ wordpress_data_path }}/users/{{ item.item.dbname }}.csv
+    {{ '--skip-update' if item.item.users.skip_update | default(true) else '' }}
+    --send-email
+  register: _check_installation_users
+  changed_when: "'Success' in _check_installation_users.stdout"
+  with_items: "{{ _check_copy_users.results | default([]) }}"
+  when: item.changed
+  tags:
+    - wordpress-users-import-file
