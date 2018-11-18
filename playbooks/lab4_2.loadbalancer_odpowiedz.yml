@@ -1,0 +1,25 @@
+---
+- hosts: wordpress
+  gather_facts: True
+
+- hosts: loadbalancer
+  gather_facts: smart
+  become: True
+
+#  pre_tasks: 
+#    - debug:
+#        msg: "{{ hostvars[groups['wordpress'][0]] }}"
+
+  roles:
+    - { role: app_apache_template_proxy }
+
+  tasks: 
+    - name: "APP_APACHE_PROXY | a2enmod for our configs"
+      apache2_module: name={{ item }} state=present
+      with_items:
+        - proxy_http
+        - proxy_balancer
+        - lbmethod_byrequests
+      notify:
+        - restart apache2
+    

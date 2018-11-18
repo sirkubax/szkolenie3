@@ -1,22 +1,19 @@
 [all:vars]
-ansible_connection=ssh
-ansible_ssh_private_key_file = ~/.ssh/id_rsa_szkolenie
-ansible_ssh_user = ubuntu
-system_env = szkolenie
-location = london
+system_env=szkolenie
+location=london
 
-#przykład:
+#przykład grupy mylocalhost
 [mylocalhost]
 localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python"
 
+#grupa mgmt
 [mgmt]
 mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
 #mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
 
+#grupa apache
 [apache]
-#ec2-35-177-32-191.eu-west-2.compute.amazonaws.com
-52.56.224.245
-35.178.121.103
+35.177.247.47
 
 [backend]
 35.176.197.248
@@ -24,3 +21,16 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
 [prod:children]
 apache
 backend
+
+#grupa wordpress
+[wordpress]
+35.177.247.47
+#3.8.8.38
+
+#grupa loadbalancer
+[loadbalancer]
+35.177.159.71
+
+#grupa mysql
+[mysql]
+35.177.247.47

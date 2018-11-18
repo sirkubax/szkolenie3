@@ -1,0 +1,28 @@
+#!/bin/bash
+export DEBIAN_FRONTEND=noninteractive;
+apt-get update;
+apt-get -y install nginx;
+lbconf="
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+
+    root /usr/share/nginx/html;
+    index index.php index.html index.htm;
+
+    location / {
+      proxy_pass  http://backend;
+      include proxy_params;
+    }
+
+}
+
+upstream backend  {
+    ip_hash;
+    server web_node_1_private_ip ;
+    server web_node_2_private_ip :
+}
+"
+echo $lbconf > /etc/nginx/sites-enabled/default;
+service nginx restart;#!/bin/bash
+

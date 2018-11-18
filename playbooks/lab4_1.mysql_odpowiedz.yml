@@ -1,0 +1,8 @@
+---
+- hosts: mysql
+  become: True
+
+  roles:
+    - { role: geerlingguy.mysql }
+
+  tasks: []

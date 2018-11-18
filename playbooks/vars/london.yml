@@ -1,4 +1,5 @@
-ami: ami-f1d7c395
+#ami: ami-f1d7c395
+ami: ami-061a2d878e5754b62
 region: eu-west-2
 subnet: subnet-b516cbce
 sg: szkolenie3-security-group

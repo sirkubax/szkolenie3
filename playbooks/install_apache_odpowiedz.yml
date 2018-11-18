@@ -22,7 +22,24 @@
     with_items:
     - apache2
     - htop
+    - dstat
     become: True
 
   - name: Wait for instances to listen on port 80
     wait_for: state=started host=localhost port=80 timeout=15 delay=5
+
+  - name: create file directory 
+    file: 
+      path: "~/szkolenie_playbooks_{{ nazwa_uzytkownika }}"
+      state: directory
+      mode: 0775
+    vars:
+      nazwa_uzytkownika: szkolenie01
+
+  - name: create file directory with lookup
+    file: 
+      path: "~/szkolenie_playbooks_{{ nazwa_uzytkownika }}"
+      state: directory
+      mode: 0775
+    vars:
+      nazwa_uzytkownika: "{{ lookup('pipe', 'whoami') }}"

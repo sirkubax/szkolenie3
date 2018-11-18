@@ -12,6 +12,14 @@
   notify:
     - reload apache2
 
+- name: "APP_APACHE_PROXY | Upload Static vhosts - balancer"
+  template: 
+      src: 0-vhost-template-balancer
+      dest: /etc/apache2/sites-available/{{ item.servername }}.conf
+  with_items: "{{ vhosts_set_balancer }}"
+  notify:
+    - reload apache2
+
 - name: "APP_APACHE_PROXY | a2enmod for our configs"
   apache2_module: name={{ item }} state=present
   with_items:
@@ -31,3 +39,9 @@
   notify:
     - reload apache2
 
+#a2enmod proxy_balancer
+#a2enmod proxy_http
+#a2enmod ssl
+#a2enmod proxy
+#a2enmod proxy_fcgi
+#a2enmod lbmethod_byrequests
