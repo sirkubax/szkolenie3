@@ -1,9 +1,11 @@
 ---
+- name: "pobierz nazwe uzytkownika"
+  set_facts:
+    kim_jestem: "{{ lookup('pipe', 'whoami') }}"
+
 - name: "utworz katalog"
   file:
     state: directory
     mode: 0754
     path: "~/szkolenie_roles{{ kim_jestem }}"
-  vars:
-    kim_jestem: "{{ lookup('pipe', 'whoami') }}"
 
