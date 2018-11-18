@@ -1,8 +1,11 @@
----
+--
 
 - name: "utworz katalog"
   file:
     state: directory
     mode: 0754
     path: "~/szkolenie_roles{{ kimjestem }}"
+#  vars:
+#    kimjestem: "{{ lookup('pipe', 'whoami') }}"
+
 
