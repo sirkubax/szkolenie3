@@ -5,7 +5,7 @@
 - hosts: wordpress
   become: true
   roles:
-  - oefenweb.wordpress
+  - oefenweb.wordpress.example
   vars:
     wordpress_installs:
       - name: wordpress

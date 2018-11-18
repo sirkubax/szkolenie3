@@ -1,0 +1,23 @@
+---
+#Uruchomienie:
+#~/szkolenie$ ansible-playbook playbooks/lab_roles.yml
+#
+- hosts: apache
+
+  vars:
+      vars_files_var: ["vars/szkolenie.yml", "vars/szkolenie_vault.yml"]
+
+  pre_tasks:
+      - include_vars: "{{ item }}"
+        with_items: "{{ vars_files_var }}"
+
+  tasks:
+    - name: "show time"
+      shell: date
+
+  roles:
+    - sys_debug
+    - { role: sys_init_common, become: True, when: "inventory_hostname == groups['apache'][0]" }
+    - { role: geerlingguy.apache_example }
+    - { role: mid_katalog_szkolenie, tags: katalog }
+

@@ -3,6 +3,6 @@
   become: True
 
   roles:
-    - { role: geerlingguy.mysql }
+    - { role: geerlingguy.mysql_example }
 
   tasks: []
