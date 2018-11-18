@@ -15,7 +15,7 @@
 
       - name: "pobierz nazwe uzytkownika"
         set_fact:
-              kimjestem: "{{ lookup('pipe', 'whoami') }}"
+            kimjestem: "{{ lookup('pipe', 'whoami') }}"
         tags:
             - always
 
