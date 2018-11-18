@@ -10,6 +10,14 @@
   pre_tasks:
       - include_vars: "{{ item }}"
         with_items: "{{ vars_files_var }}"
+        tags:
+            - always
+
+      - name: "pobierz nazwe uzytkownika"
+        set_facts:
+              kimjestem: "{{ lookup('pipe', 'whoami') }}"
+        tags:
+            - always
 
   tasks:
     - name: "show time"
