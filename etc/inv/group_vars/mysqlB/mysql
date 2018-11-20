@@ -1,0 +1,14 @@
+mysql_databases:
+   - name: wordpress
+     collation: utf8_general_ci
+     encoding: utf8
+     replicate: 1
+
+mysql_users: 
+   - name: wpuser
+     host: "%"
+     password: secret123
+     priv: "*.*:ALL"
+
+
+mysql_root_password: "{{ mysql_root_password_vault }}"

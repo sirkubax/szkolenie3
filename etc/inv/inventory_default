@@ -35,3 +35,10 @@ backend
 #grupa mysql
 [mysql]
 35.177.247.47
+
+[mysqlB]
+
+[mysql:children]
+mysql_vault
+
+[mysql_vault]
