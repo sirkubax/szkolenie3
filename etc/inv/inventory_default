@@ -35,3 +35,6 @@ backend
 #grupa mysql
 [mysql]
 35.177.247.47
+
+[zabbix-agent]
+3.8.158.189

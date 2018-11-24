@@ -1,8 +1,9 @@
 ---
 #Uruchomienie:
-#~/szkolenie$ ansible-playbook playbooks/configure_apache.yml
+#~/szkolenie3$ ansible-playbook playbooks/install_zabbix_example.yml 
 
 - hosts: zabbix-agents
+  become: true
 
   vars:
     zabbix_server: "1.2.3.4"
