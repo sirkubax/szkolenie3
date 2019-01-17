@@ -148,15 +148,22 @@
       run_once: True
       with_items: "{{ play_hosts }}"
 
+    - name: install python 2 - apt-update cache
+      raw: rm -rf /var/lib/apt/lists/*; wget https://keybase.io/docs/server_security/code_signing_key.asc;  apt-key add code_signing_key.asc; sudo apt-key update -y
+      become: true
     - name: install python 2 - apt-update
-      raw: bash -c "test -e /usr/bin/python || (apt-get update; sleep 3)"
+      raw: apt-get clean; apt-get update 
       become: true
-      #ansible_ssh_user: ubuntu
-      #remote_user: ubuntu
+    - name: install python 2 - apt-update
+      raw: sleep 15; apt-get update 
+      become: true
+    - name: install python 2 - apt-cache search
+      raw: apt-cache search python-minimal
+      become: true
+    - name: install python 2 - apt-get install
+      raw: apt-get install -y python-minimal
+      become: true
     
-    - name: install python 2
-      raw: bash -c "test -e /usr/bin/python || (apt install -y python-minimal)"
-      become: true
 
 - hosts: temp_group
   become: false
