@@ -13,8 +13,8 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
 
 #grupa apache
 [apache]
-10.218.0.60
-10.218.0.83
+10.218.0.124
+10.218.0.183
 
 [backend]
 10.218.0.190
