@@ -1,0 +1,41 @@
+[all:vars]
+system_env=szkolenie
+location=london
+
+#przykład grupy mylocalhost
+[mylocalhost]
+localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python"
+
+#grupa mgmt
+[mgmt]
+mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
+#mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
+
+#grupa apache
+[apache]
+10.218.0.124
+10.218.0.183
+
+[backend]
+10.218.0.190
+
+
+[prod:children]
+apache
+backend
+
+#grupa wordpress
+[wordpress]
+35.177.247.47
+#3.8.8.38
+
+#grupa loadbalancer
+[loadbalancer]
+10.218.0.87
+
+#grupa mysql
+[mysql]
+35.177.247.47
+
+[zabbix-agent]
+3.8.158.189
