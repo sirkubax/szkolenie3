@@ -1,0 +1,14 @@
+[all:vars]
+system_env=szkolenie
+
+[zabbix:children]
+zabbix-servers
+zabbix-agents
+
+[zabbix-servers]
+1.2.3.4
+
+[zabbix-agents]
+3.8.158.189
+52.56.161.127
+52.56.177.236 #nowy serwer

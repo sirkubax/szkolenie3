@@ -1,0 +1,61 @@
+---
+#Uruchomienie:
+#~/szkolenie3$ ansible-playbook playbooks/install_zabbix_example.yml 
+
+- hosts: zabbix-agents
+  become: true
+
+  vars:
+    zabbix_server: "1.2.3.4"
+    repository_deb: "http://repo.zabbix.com/zabbix/3.2/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.2-1+xenial_all.deb"
+
+  handlers:
+  - name: restart zabbix
+    service: 
+      name: zabbix-agent
+      state: restarted
+      enabled: True
+    #notify: 
+    #  - Wait for instances to listen on port 80
+    become: True
+
+  - name: Wait for instances to listen on port 80
+    wait_for: 
+      state: started 
+      host: localhost 
+      port: 80 
+      timeout: 15 
+      delay: 5
+
+  tasks:
+  - name: Install zabbix repository as a deb package
+    apt:
+      deb: "{{ item }}"
+    with_items:
+        - "{{ repository_deb }}"
+
+  - name: Update cache 
+    apt: 
+      update_cache: yes
+      cache_valid_time: 7200
+    become: True
+
+  - name: Install packages
+    apt: 
+      name: "{{ item }}"
+    with_items:
+      - zabbix-agent
+    notify:
+      - restart zabbix
+    become: True
+
+  - name: configure zabbix server list
+    lineinfile: 
+      dest: /etc/zabbix/zabbix_agentd.conf
+      line: "Server=127.0.0.1,{{ zabbix_server }}"
+      regexp: "^Server=127.0.0.1"
+    notify:
+      - restart zabbix
+    become: True
+
+
