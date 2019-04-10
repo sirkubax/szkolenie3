@@ -1,9 +1,14 @@
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=apache02 role=frontend"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=apache01 role=frontend"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=backend01 role=backend"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk16 role=wordpress"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk01 role=wordpress"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk02 role=wordpress"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk03 role=wordpress"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk04 role=wordpress"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk05 role=wordpress"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk06 role=wordpress"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk07 role=wordpress"
 
 
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=mysql01_szk16 role=mysql"
@@ -12,6 +17,8 @@ ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=mys
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=mysql01_szk03 role=mysql"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=mysql01_szk04 role=mysql"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=mysql01_szk05 role=mysql"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=mysql01_szk06 role=mysql"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=mysql01_szk07 role=mysql"
 
 
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=loadbalancer01_szk16 role=loadbalancer"
@@ -20,6 +27,8 @@ ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=loa
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=loadbalancer01_szk03 role=loadbalancer"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=loadbalancer01_szk04 role=loadbalancer"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=loadbalancer01_szk05 role=loadbalancer"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=loadbalancer01_szk06 role=loadbalancer"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=loadbalancer01_szk07 role=loadbalancer"
 
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress02_szk16 role=wordpress"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress02_szk01 role=wordpress"
@@ -27,3 +36,5 @@ ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wod
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress02_szk03 role=wordpress"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress02_szk04 role=wordpress"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress02_szk05 role=wordpress"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress02_szk06 role=wordpress"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress02_szk07 role=wordpress"
