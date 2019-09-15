@@ -13,11 +13,12 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
 
 #grupa apache
 [apache]
-10.218.0.37
-10.218.0.204
+10.218.0.121
+10.218.0.168
 
 [backend]
-10.218.0.125
+10.218.0.117
+
 
 [prod:children]
 apache
@@ -25,20 +26,16 @@ backend
 
 #grupa wordpress
 [wordpress]
-10.218.0.115
-10.218.0.9
+35.177.211.222
+#3.8.8.38
 
 #grupa loadbalancer
 [loadbalancer]
-10.218.0.183
+3.9.114.245
 
 #grupa mysql
 [mysql]
-10.218.0.107
+10.218.0.117
 
-[mysqlB]
-
-[mysql:children]
-mysql_vault
-
-[mysql_vault]
+[zabbix-agent]
+3.8.158.189
