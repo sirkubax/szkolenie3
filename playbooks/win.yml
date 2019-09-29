@@ -1,0 +1,36 @@
+- hosts: windows
+
+  tasks:
+    - name: Ensure 7-Zip is installed via Chocolatey
+      win_chocolatey:
+          name: 7zip
+          state: present
+
+    - name: Run an executable using win_command
+      win_command: whoami.exe
+
+#    - name: Run a command under PowerShell
+#      win_shell: Get-Service -Name service | Stop-Service
+    
+    - name: Run a multiple shell commands
+      win_shell: |
+        New-Item -Path C:\temp -ItemType Directory
+        Remove-Item -Path C:\temp -Force -Recurse
+        $path_info = Get-Item -Path C:\temp
+        $path_info.FullName
+    
+    - name: Run an executable using win_command
+      win_command: whoami.exe
+    
+    - name: Run a cmd command
+      win_command: cmd.exe /c mkdir C:\temp
+    
+#    - name: Run a vbs script
+#      win_command: cscript.exe script.vbs
+#
+    - name: Run a command under cmd
+      win_shell: mkdir C:\temp
+      args:
+        executable: cmd.exe
+      ignore_errors: True
+    

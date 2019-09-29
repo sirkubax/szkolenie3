@@ -1,0 +1,9 @@
+- hosts: localhost
+
+  tasks:
+
+      - set_fact:
+          aaa: "{{ lookup('pipe', 'date +%Y%m%d') }}"
+
+      - debug:
+          msg: "{{ aaa }}" 
