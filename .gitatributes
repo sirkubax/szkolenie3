@@ -1,0 +1,3 @@
+etc/inv/host_vars/*/*_vault.yml diff=ansible-vault
+etc/inv/group_vars_vars/*/*_vault.yml diff=ansible-vault
+
