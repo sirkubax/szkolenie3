@@ -13,11 +13,11 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
 
 #grupa apache
 [apache]
-ip-10-218-0-74.eu-west-2.compute.internal
-10.218.0.238
+ec2-3-10-180-39.eu-west-2.compute.amazonaws.com
+10.218.0.101
 
 [backend]
-10.218.0.187
+10.218.0.58
 
 
 [prod:children]
