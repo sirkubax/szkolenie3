@@ -1,0 +1,46 @@
+---
+- hosts: all
+
+  name: Pierwszy playbook
+
+  vars:
+    zmiennaA: 1234
+
+  vars_files:
+    - "vars/{{ nasze_srodowisko | default(system_env) }}.yml"
+  #        vars_files:                               
+  #                - ["{{ system_version_file }}"]       
+  #                        - ["{{ system_version_file }}_vault"] 
+  #
+
+  tasks:
+    - ping:
+      ignore_errors: True
+
+    - ping:
+      name: to jest opcjonalna nazwa
+      register: wyjscie_do_zmiennej
+      faled_when: False
+      changed_when: False
+
+    - debug: var=ansible_facts
+
+  #roles:
+  #  - sys_debug
+
+  handlers:
+    - name: restart apache
+      ping:
+
+
+
+  #to jest komentarz
+  gather_facts: smart
+  become: True
+  
+  pre_tasks: []
+  post_tasks: []
+
+
+- hosts: all
+  name: Drugi playbook

@@ -1,0 +1,27 @@
+---
+- hosts: mgmt
+  gather_facts: smart
+
+  tasks:
+
+    #To wykona sie na kazdym hoscie i zwroci IP do zmiennej newip
+    - name: change ip
+      command: /root/ipconfigure.sh
+      register: newip
+    
+    # to stworzy Ci grupe, z ktoro mozna zrobic co chcesz 
+    - name: Add instances to host group                                       
+      local_action: add_host hostname={{ hostvars[item].newip.stdout }} groupname=temp_group
+      with_items: "{{ play_hosts }}"
+      run_once: True
+    
+    - debug:
+        msg: "{{ groups['temp_group'] }}"
+
+    # mozna by tez to wypisac do pliku czy cokolwiek potrzeba
+    
+- hosts: temp_group
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "{{ groups['play_hosts'] }}"
