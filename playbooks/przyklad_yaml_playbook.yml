@@ -1,0 +1,55 @@
+---
+
+moja_lista_slownikow:
+  - zadanie_A: wartosc_A
+    become: True
+    user: kopytko
+  - zadanie_B: wartosc_B
+    become: False
+    user: szkolenie
+
+#---------------------------------------------
+
+- hosts: all
+
+  vars:
+    zmiennaA: 1234
+
+  tasks:
+    - ping:
+      ignore_errors: True
+
+    - ping:
+      name: to jest opcjonalna nazwa
+      register: wyjscie_do_zmiennej
+      faled_when: False
+      changed_when: False
+
+    - debug: var=ansible_facts
+
+  roles:
+    - sys_debug
+
+  handlers:
+    - name: restart apache
+      ping:
+
+  #to jest komentarz
+  gather_facts: smart
+  become: True
+  
+  pre_tasks: []
+  post_tasks: []
+
+  # zauwaz ze kolejnosc kluczy w slowniku nie ma znaczenia - przykladowo pre_tasks moze byc na samym koncu, albo w dowolnym innym miejscu tego obiektu (slownika) - bedzie dzialac prawidlowo
+
+
+- hosts: apache
+  name: Drugi playbook - jest pusty - tylko wgrywamy zmienne do pamieci
+
+
+- hosts: all
+  name: Trzeci playbook
+
+  roles:
+    - sys_debug

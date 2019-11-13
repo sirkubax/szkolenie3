@@ -1,0 +1,40 @@
+---
+- hosts: all
+
+  #to jest komentarz
+  gather_facts: smart
+  become: True
+  
+  pre_tasks: []
+  post_tasks: []
+
+  vars:
+    zmiennaA: 1234
+
+  tasks:
+    - ping:
+      ignore_errors: True
+
+    - name: restart apache
+      service: 
+        name: apache2
+        state: restarted
+        enabled: True
+      register: wynik_restartu
+
+    - name: wypisz na ekran
+      debug:
+        msg: "{{ zmiennaA }}"
+
+
+  roles:
+    - sys_debug
+    - { role: sys_init_common, become: True, tags: ['init_commom'] }
+    - role: sys_manage_keys
+      become: True
+      register: mojazmienna
+
+  handlers:
+    - name: restart apache
+      ping:
+

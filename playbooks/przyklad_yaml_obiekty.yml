@@ -1,0 +1,33 @@
+---
+moja_lista:
+  - pierwszy_element_listy
+  - drugi_element_listy
+  - trzeci_element_listy
+
+moja_lista_inny_zapis: [ pierwszy_element_listy, drugi_element_listy, trzeci_element_listy ]
+
+moj_slownik:
+  pierwszy_klucz: wartosc_klucza_A
+  drugi_klucz: wartosc_klucza_B
+  trzeci_klucz: wartosc_klucza_C
+
+moj_slownik_inny_zapis: { pierwszy_klucz: wartosc_klucza_A, drugi_klucz: wartosc_klucza_B, trzeci_klucz: wartosc_klucza_C }
+
+moja_lista_slownikow:
+  - zadanie_A: wartosc_A
+    become: True
+    user: kopytko
+  - zadanie_B: wartosc_B
+    become: False
+    user: szkolenie
+
+moja_lista_slownikow_inny_zapis:
+  - { zadanie_A: wartosc_A, become: True, user: kopytko }
+  - { zadanie_B: wartosc_B, become: False, user: szkolenie }
+
+moja_lista_slownikow_jeszcze_inny_zapis: [ { zadanie_A: wartosc_A, become: True, user: kopytko }, { zadanie_B: wartosc_B, become: False, user: szkolenie } ]
+
+pusty_slownik: {}
+
+pusta_lista: {}
+
