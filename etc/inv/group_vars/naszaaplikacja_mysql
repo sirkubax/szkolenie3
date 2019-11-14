@@ -1,0 +1,11 @@
+mysql_databases:
+   - name: szkolenie_db
+     collation: utf8_general_ci
+     encoding: utf8
+     replicate: 1
+
+mysql_users: 
+   - name: szkolenie_user
+     host: "%"
+     password: secret123
+     priv: "*.*:ALL"

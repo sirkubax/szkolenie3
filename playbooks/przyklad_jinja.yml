@@ -1,0 +1,19 @@
+---
+- hosts: all
+
+  vars:
+    zmiennaA: 1234
+
+  var_files:
+    - {{ custom_env }}.yaml
+    - {{ ansible_os }}.yaml
+
+#  with_first_found:
+
+  pre_tasks: []
+
+  tasks:
+    - name: wypisz na ekran
+      debug:
+        msg: "{{ zmiennaA }}"
+

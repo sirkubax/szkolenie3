@@ -27,7 +27,14 @@ moja_lista_slownikow_inny_zapis:
 
 moja_lista_slownikow_jeszcze_inny_zapis: [ { zadanie_A: wartosc_A, become: True, user: kopytko }, { zadanie_B: wartosc_B, become: False, user: szkolenie } ]
 
+
+pusta_lista: []
 pusty_slownik: {}
 
-pusta_lista: {}
 
+zagniezdzowny_slownik:
+  obiekt:
+    parametryA: wartoscA
+    parametryB: wartoscB
+
+zagniezdzowny_slownik_inaczej: { obiekt: { parametrA: wartoscA, parametrB: wartoscB } }

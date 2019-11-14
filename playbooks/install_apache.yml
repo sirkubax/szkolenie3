@@ -1,29 +1,30 @@
 ---
 #Uruchomienie:
-#~/szkolenie$ ansible-playbook playbooks/configure_apache.yml
-#
+#~/szkolenie$ ansible-playbook playbooks/install_apache.yml
+
 - hosts: apache
-
-  vars:
-      vars_files_var: ["vars/szkolenie.yml", "vars/szkolenie_vault.yml"]
-
-  pre_tasks:
-      - include_vars: "{{ item }}"
-        with_items: "{{ vars_files_var }}"
 
   tasks:
   - name: update cache 
-    apt: update_cache=yes cache_valid_time=7200
+    apt: 
+      update_cache: yes 
+      cache_valid_time: 7200
     changed_when: False
     become: True
 
   - name: install packages
-    apt: name={{ item }}
-    with_items:
-    - apache2
-    - htop
+    apt: 
+      pkg:
+        - apache2
+        - htop
+        #tu dopisz kolejny element listy - dstat
     become: True
 
   - name: Wait for instances to listen on port 80
     wait_for: state=started host=localhost port=80 timeout=15 delay=5
 
+  - name: create file directory 
+    #tu uzyj wlasciwy modul aby stworzyc katalog
+
+  - name: utworz plik /tmp/host_is_ready_szkolenieXX z zawartoscia OK
+    #mozliwe moduly: shell, template, copy

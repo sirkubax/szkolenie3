@@ -1,0 +1,15 @@
+- hosts: naszaaplikacja
+
+  become: true
+
+  #zmienne przydatne do parametryzacji wgrania, oraz szablonowania konfiguracji
+  #vars:
+  #  katalog_aplikacji: /var/www/szkolenie
+  #  log_dir: /var/www/szkolenie/logs/
+  #  port: 5001
+
+  pre_tasks: []
+
+  roles:
+    - app_naszaaplikacja
+

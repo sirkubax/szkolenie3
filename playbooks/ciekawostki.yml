@@ -1,0 +1,24 @@
+- hosts: naszaaplikacja
+
+
+  tasks:
+  - name: napisz ze jest dobra pogoda
+    shell: echo 'dzisiaj pogoda jest ok'
+    #register: twojazmienna
+
+  - name: potwierdzam
+    shell: echo 'dzisiaj pogoda jest ok'
+    #when:
+    # - 'pogoda jest ok' in twojazmienna.stdout 
+
+  - name: lookup
+    debug:
+      msg: "{{ lookup('pipe', 'date') }}, lookup('pipe', 'whoami') }}"
+
+  - name: lookup
+    debug:
+      msg: "{{ lookup('url','http://mgmt2.muszynki.pro:5888' }}"
+
+#lookup
+#register
+#changed_when

@@ -1,0 +1,18 @@
+---
+#http://stackoverflow.com/questions/19857343/display-the-time-it-takes-each-vagrant-ansible-task-to-complete
+#https://github.com/jlafon/ansible-profile
+#
+## Outputs a timestamp to the console
+##
+## Used for debugging/timing stuff.
+##
+#
+- local_action: shell date +'%F %T'
+  register: ts
+  become: False
+  changed_when: False
+
+- name: Timestamp
+  debug: msg="{{ ts.stdout }}"
+  when: ts is defined and ts.stdout is defined
+  become: False

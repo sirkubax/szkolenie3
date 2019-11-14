@@ -20,7 +20,7 @@
     debug: 
         msg: "{{ nasz_slownik }}"
   
-  - name: "Ustaw drugi fakt" 
+  - name: "Ustaw drugi fakt - czy cos nadpisuje?" 
     set_fact:
       nasz_slownik: 
         b: 2
