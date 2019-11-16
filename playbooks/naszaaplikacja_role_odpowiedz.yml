@@ -11,5 +11,5 @@
   pre_tasks: []
 
   roles:
-    - app_naszaaplikacja
+    - app_naszaaplikacja_odpowiedz
 

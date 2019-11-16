@@ -1,0 +1,6 @@
+- name: Install nginx
+  package: name=nginx state=present
+
+- name: Copy nginx configuration
+  template: src=loadbalancer.conf dest=/etc/nginx/conf.d/default.conf
+  notify: restart nginx

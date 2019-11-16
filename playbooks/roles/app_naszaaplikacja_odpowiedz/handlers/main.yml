@@ -1,0 +1,24 @@
+- name: restart apache
+  service:
+    name: apache2
+    state: restarted
+  notify: 
+    - Wait for instances to listen on port 80
+    - Wait for instances to listen on port 5081
+
+- name: Wait for instances to listen on port 80
+  wait_for: 
+    state: started 
+    host: localhost 
+    port: 80 
+    timeout: 15 
+    delay: 5
+
+- name: Wait for instances to listen on port 5081
+  wait_for: 
+    state: started 
+    host: localhost 
+    port: "{{ port }}"
+    timeout: 15 
+    delay: 5
+

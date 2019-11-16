@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>~/szkolenie3/playbooks/roles/app_apache_template_proxy/templates/0-vhost-template.html.html</title>
+<meta name="Generator" content="Vim/7.4">
+<meta name="plugin-version" content="vim7.4_v2">
+<meta name="syntax" content="jinja">
+<meta name="settings" content="use_css,pre_wrap,no_foldcolumn,expand_tabs,prevent_copy=">
+<meta name="colorscheme" content="none">
+<style type="text/css">
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #0fffff; background-color: #000000; }
+* { font-size: 1em; }
+.Constant { color: #ff00ff; }
+.Identifier { color: #00ffff; font-weight: bold; }
+.Statement { color: #f00f00; }
+.PreProc { color: #0fd7ff; }
+.Type { color: #87f0af; }
+-->
+</style>
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+</head>
+<body>
+<pre id='vimCodeElement'>
+<span class="Identifier">&lt;</span>VirtualHost<span class="Identifier"> *:</span><span class="PreProc">{{ item.port | </span><span class="Identifier">default</span><span class="PreProc">(80) }}</span><span class="Identifier">&gt;</span>
+        ServerName <span class="PreProc">{{ item.servername }}</span>
+<span class="PreProc">{% </span><span class="Statement">if</span><span class="PreProc"> item.serveralias </span><span class="Statement">is</span><span class="PreProc"> </span><span class="Type">defined</span><span class="PreProc"> and item.serveralias|</span><span class="Identifier">length</span><span class="PreProc"> &gt; 0 %}</span>
+<span class="PreProc">{% </span><span class="Statement">for</span><span class="PreProc"> kopytko </span><span class="Statement">in</span><span class="PreProc"> item.serveralias %}</span>
+        ServerAlias <span class="PreProc">{{ kopytko }}</span>
+<span class="PreProc">{% </span><span class="Statement">endfor</span><span class="PreProc"> %}</span>
+<span class="PreProc">{% </span><span class="Statement">endif</span><span class="PreProc"> %}</span>
+
+        LogLevel <span class="PreProc">{{ item.loglvl |</span><span class="Identifier">default</span><span class="PreProc">(</span><span class="Constant">'warn'</span><span class="PreProc">) }}</span>
+        ErrorLog /var/log/apache2/<span class="PreProc">{{ item.servername }}</span>-error.log
+        CustomLog /var/log/apache2/<span class="PreProc">{{ item.servername }}</span>-access.log combined
+
+        <span class="PreProc">{{ item.staticpart }}</span>
+
+<span class="PreProc">{% </span><span class="Statement">for</span><span class="PreProc"> proxy </span><span class="Statement">in</span><span class="PreProc"> item.proxy_set %}</span>
+        ProxyPass <span class="PreProc">{{ proxy.uri_match }}</span> <span class="PreProc">{{ proxy.dest }}</span>
+        ProxyPassReverse <span class="PreProc">{{ proxy.uri_match }}</span> <span class="PreProc">{{ proxy.dest }}</span>
+<span class="PreProc">{% </span><span class="Statement">endfor</span><span class="PreProc"> %}</span>
+
+<span class="Identifier">&lt;/</span>VirtualHost<span class="Identifier">&gt;</span>
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

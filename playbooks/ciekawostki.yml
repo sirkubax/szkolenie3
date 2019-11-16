@@ -19,6 +19,12 @@
     debug:
       msg: "{{ lookup('url','http://mgmt2.muszynki.pro:5888' }}"
 
+  - command: /usr/bin/false
+    retries: 3
+    delay: 3
+    register: result
+    until: result.rc == 0
+
 #lookup
 #register
 #changed_when

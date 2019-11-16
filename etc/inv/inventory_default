@@ -43,3 +43,9 @@ backend
 
 [naszaaplikacja]
 3.10.56.182
+
+[naszaaplikacja_mysql]
+3.10.56.182
+
+[naszaaplikacja_loadbalancer]
+3.10.56.182

@@ -10,6 +10,7 @@ moja_lista_slownikow:
 
 #---------------------------------------------
 
+
 - hosts: all
 
   vars:
@@ -19,9 +20,7 @@ moja_lista_slownikow:
     - ping:
       ignore_errors: True
 
-    - ping:
-      name: to jest opcjonalna nazwa
-      register: wyjscie_do_zmiennej
+    - ping: name: to jest opcjonalna nazwa register: wyjscie_do_zmiennej
       faled_when: False
       changed_when: False
 
@@ -43,6 +42,7 @@ moja_lista_slownikow:
 
   # zauwaz ze kolejnosc kluczy w slowniku nie ma znaczenia - przykladowo pre_tasks moze byc na samym koncu, albo w dowolnym innym miejscu tego obiektu (slownika) - bedzie dzialac prawidlowo
 
+- { hosts: all, gather_facts: True }
 
 - hosts: apache
   name: Drugi playbook - jest pusty - tylko wgrywamy zmienne do pamieci

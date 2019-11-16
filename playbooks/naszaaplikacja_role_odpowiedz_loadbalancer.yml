@@ -1,5 +1,9 @@
 - hosts: naszaaplikacja_loadbalancer
 
+  vars:
+    katalog_glowny: /var/www/szkolenie
+    katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
+
 #### apache na wybranym porcie
 
   become: true
@@ -13,5 +17,5 @@
   pre_tasks: []
 
   roles:
-    - app_naszaaplikacja
+    - przykladowy_loadbalancer
 

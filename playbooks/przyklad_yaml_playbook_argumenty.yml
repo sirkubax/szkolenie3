@@ -1,4 +1,9 @@
 ---
+- hosts: apache
+  gather_facts: True
+
+- { hosts: mysql, gather_facts: False }
+
 - hosts: all
 
   vars:
