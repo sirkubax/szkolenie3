@@ -1,0 +1,34 @@
+- hosts: naszaaplikacja
+
+  become: true
+
+  vars:
+    katalog_glowny: /var/www/szkolenie
+    katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
+    log_dir: "{{ katalog_glowny }}/logs"
+    port: 5081
+
+  tasks:
+    - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi przekazując listę'
+      apt: 
+        pkg:
+          - apache2
+          - libapache2-mod-wsgi
+
+    - name: 'zainstaluj aplikacje apache2 i pozostale pakiety przy pomocy with_items'
+      apt: 
+        name: "{{ item }}"
+      loop:
+        - apache2
+        - libapache2-mod-wsgi
+          #- libapache2-mod-wsgi-py3 #dla python3
+        - python-dev
+
+    - git:
+        repo: https://github.com/sirkubax/naszaaplikacja.git
+        dest: "{{ katalog_glowny }}"
+        force: yes
+      name: 'klonuj repozytorium aplikacji'
+      tags:
+        - klonuj
+

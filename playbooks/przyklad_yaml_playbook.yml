@@ -27,7 +27,7 @@ moja_lista_slownikow:
     - debug: var=ansible_facts
 
   roles:
-    - sys_debug
+    - przykladowa_rola
 
   handlers:
     - name: restart apache

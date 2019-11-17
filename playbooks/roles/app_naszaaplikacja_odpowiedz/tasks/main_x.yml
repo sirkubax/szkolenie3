@@ -28,16 +28,14 @@
     virtualenv: "{{ katalog_aplikacji }}/venv"
   name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
 
-- name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf{{ port }} jako template'
+- name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf jako template'
   template:
       src: naszaaplikacja.apache.conf
-      dest: "/etc/apache2/sites-available/naszaaplikacja.apache{{ port }}.conf"
+      dest: "/etc/apache2/sites-available/{{ item.dest }}"
   backup: True
-
-- name: 'usun /etc/apache2/sites-available/naszaaplikacja.apache jako template'
-  file:
-    path: "/etc/apache2/sites-available/naszaaplikacja.apache"
-    state: absent
+  loop:
+      - dest: naszaaplikacja.apache.conf
+        portcustom: "{{ port }}"
 
 - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
   lineinfile: 
@@ -45,18 +43,12 @@
     line: "Listen {{ port }}"
     regexp: "^Listen {{ port }}"
 
-- name: 'wylacz port 80'
-  lineinfile: 
-    dest: /etc/apache2/ports.conf
-    regexp: "^Listen 80"
-    state: absent
-
 - name: 'wlacz virtualhost'
   shell: a2ensite {{ item }}
   args:
     creates: /etc/apache2/sites-enabled/{{ item }}
   loop: 
-    - "naszaaplikacja.apache{{ port }}.conf"
+    - naszaaplikacja.apache.conf
 
 - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
   template:

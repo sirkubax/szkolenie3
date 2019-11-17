@@ -46,10 +46,22 @@
           filters:
             "tag:Name": "{{ hostname }}"
         register: with_same_hostname
+
+      - debug:
+          msg: "{{ with_same_hostname.instances }}"
+
+      - debug:
+          msg: "{{ item }}"
+        with_items: "{{ with_same_hostname.instances  }}"
+
       - assert:
           that:
-            - "with_same_hostname.instances | length == 0"
+            - "item.state == 'terminated'"
           msg: "Can't create host with same name"
+        loop: "{{ with_same_hostname.instances |flatten(levels=1) }}"
+        when:
+          - "with_same_hostname.instances | length > 0"
+
       - ec2_remote_facts:
           region: "{{ region | default('eu-west-2') }}"
           filters:

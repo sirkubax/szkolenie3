@@ -13,3 +13,14 @@
   roles:
     - { role: geerlingguy.mysql_example }
 
+
+
+- hosts: naszaaplikacja
+
+  become: true
+
+  pre_tasks: []
+
+  roles:
+    - app_naszaaplikacja_odpowiedz
+

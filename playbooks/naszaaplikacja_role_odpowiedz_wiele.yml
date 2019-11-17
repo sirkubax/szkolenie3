@@ -1,0 +1,18 @@
+- hosts: naszaaplikacja
+  become: true
+
+  roles:
+    - app_naszaaplikacja_odpowiedz
+
+- hosts: naszaaplikacja
+  become: true
+
+  vars:
+    katalog_glowny: /var/www/szkolenie5082
+    katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
+    log_dir: "{{ katalog_glowny }}/logs"
+    port: 5082
+
+
+  roles:
+    - app_naszaaplikacja_odpowiedz

@@ -1,3 +1,5 @@
+set -x
+
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=apache02 role=frontend"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=apache01 role=frontend"
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=backend01 role=backend"
@@ -37,3 +39,5 @@ ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=bac
 #for i in `seq -w 01 17`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=loadbalancer01_szk$i role=loadbalancer"; done
 #for i in `seq -w 01 17`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wordpress02_szk$i role=wordpress"; done
 #ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.large hostname=awx role=awx"
+
+for i in `seq -w 01 18`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=naszaaplikacja01_szk$i role=naszaaplikacja"; done

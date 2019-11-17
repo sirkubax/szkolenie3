@@ -2,5 +2,3 @@ katalog_glowny: /var/www/szkolenie
 katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
 log_dir: "{{ katalog_glowny }}/logs"
 port: 5081
-naszaaplikacja:
-  port: 5001

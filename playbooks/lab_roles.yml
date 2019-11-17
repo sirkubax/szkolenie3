@@ -1,15 +1,20 @@
 ---
 #Uruchomienie:
 #~/szkolenie$ ansible-playbook playbooks/lab_roles.yml
-#
+
 - hosts: apache
 
+  #uzyjemy include_vars zamiast (lepszego) vars_files zeby uzyc pre_tasks
+  #vars_files:                               
+  #  - ["{{ system_version_file }}"]       
+  #  - ["{{ system_version_file }}_vault"] 
+  
   vars:
-      vars_files_var: ["vars/szkolenie.yml", "vars/szkolenie_vault.yml"]
+    vars_files_var: ["vars/szkolenie.yml", "vars/szkolenie_vault.yml"]
 
   pre_tasks:
-      - include_vars: "{{ item }}"
-        with_items: "{{ vars_files_var }}"
+    - include_vars: "{{ item }}"
+      with_items: "{{ vars_files_var }}"
 
   tasks:
     - name: "show time"
@@ -17,6 +22,6 @@
 
   roles:
     - przykladowa_rola
-  # - { role: sys_init_common, become: True, when: "inventory_hostname == groups['apache'][0]" }
-  # - { role: apache2 }
+   #- { role: sys_init_common, become: True, when: "inventory_hostname == groups['apache'][0]" }
+   #- { role: apache2 }
 

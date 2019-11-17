@@ -1,26 +1,3 @@
 ---
-- name: restart apache2
-  service: 
-    name: apache2
-    state: restarted
-    enabled: True
-  notify: 
-    - Wait for instances to listen on port 80
-  become: True
-
-- name: reload apache2
-  service: 
-    name: apache2
-    state: reloaded
-  notify: 
-    - Wait for instances to listen on port 80
-  become: True
-
-- name: Wait for instances to listen on port 80
-  wait_for: 
-    state: started 
-    host: localhost 
-    port: 80 
-    timeout: 15 
-    delay: 5
-
+- name: restart nginx
+  service: name=nginx state=restarted enabled=yes

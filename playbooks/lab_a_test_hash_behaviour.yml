@@ -4,7 +4,6 @@
 #
 - hosts: localhost
 
-  #ta zmienna jest ustawiona globalnie dla calego playbooka (dostepna w kontekscie playbooka)
   vars:
     nasz_slownik:
       x: 999
@@ -14,7 +13,7 @@
   - name: "Ustaw pierwszy fakt" 
     set_fact:
       nasz_slownik: 
-        a: 1
+        a: "{{ ansible_hostname }}"
   
   - name: "Wypisz pierwszy fakt" 
     debug: 

@@ -4,27 +4,18 @@
   tasks:
   - name: napisz ze jest dobra pogoda
     shell: echo 'dzisiaj pogoda jest ok'
-    #register: twojazmienna
+    register: twojazmienna
 
   - name: potwierdzam
     shell: echo 'dzisiaj pogoda jest ok'
-    #when:
-    # - 'pogoda jest ok' in twojazmienna.stdout 
 
-  - name: lookup
-    debug:
-      msg: "{{ lookup('pipe', 'date') }}, lookup('pipe', 'whoami') }}"
+#  - name: wypisz date
 
-  - name: lookup
-    debug:
-      msg: "{{ lookup('url','http://mgmt2.muszynki.pro:5888' }}"
+#  - name: sprawdz curl
 
-  - command: /usr/bin/false
-    retries: 3
-    delay: 3
-    register: result
-    until: result.rc == 0
+#  - name: sprawdz warunki logiczne
+#    assert:
+#      that:
 
-#lookup
-#register
-#changed_when
+#  - name: zawsze blad
+#    command: /usr/bin/false

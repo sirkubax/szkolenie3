@@ -3,9 +3,10 @@
   vars:
     katalog_glowny: /var/www/szkolenie
     katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
-    lista_portow: [5081, 5082]
 
-#### apache na wybranym porcie
+    #apache na wybranym porcie
+    #lista_portow: [5081, 5082]
+
 
   become: true
 

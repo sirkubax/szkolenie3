@@ -7,8 +7,6 @@
     katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
     log_dir: "{{ katalog_glowny }}/logs"
     port: 5081
-    naszaaplikacja:
-      port: 5001
 
   tasks:
     - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi przekazując listę'
@@ -31,7 +29,6 @@
         dest: "{{ katalog_glowny }}"
         force: yes
       name: 'klonuj repozytorium aplikacji'
-      notify: restart apache
 
     - pip: 
         requirements: "{{ katalog_aplikacji }}/requirements.txt"
@@ -43,14 +40,12 @@
           src: naszaaplikacja.apache.conf
           dest: /etc/apache2/sites-available/
       backup: True
-      notify: restart apache
 
     - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
       lineinfile: 
         dest: /etc/apache2/ports.conf
         line: "Listen {{ port }}"
         regexp: "^Listen {{ port }}"
-      notify: restart apache
   
     - name: 'wlacz virtualhost'
       shell: a2ensite {{ item }}
@@ -58,21 +53,18 @@
         creates: /etc/apache2/sites-enabled/{{ item }}
       loop: 
         - naszaaplikacja.apache.conf
-      notify: restart apache
 
     - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
       template:
           src: naszaaplikacja.wsgi
           dest: "{{ katalog_aplikacji }}"
       backup: True
-      notify: restart apache
 
     - name: 'Wgraj sparametryzowany config.cfg (jako template)'
       template:
           src: config.cfg
           dest: "{{ katalog_aplikacji }}"
       backup: True
-      notify: restart apache
 
     - name: 'utworz katalog na logi'
       file:
@@ -82,36 +74,8 @@
         group: www-data
         mode: 0755
 
-  handlers:
-    - name: restart apache
+    - name: 'restart apache'
       service:
         name: apache2
         state: restarted
-      notify: 
-        - Wait for instances to listen on port 80
-        - Wait for instances to listen on port 5081
-#        - Wait for instances to listen on port naszaaplikacja
 
-    - name: Wait for instances to listen on port 80
-      wait_for: 
-        state: started 
-        host: localhost 
-        port: 80 
-        timeout: 15 
-        delay: 5
-
-    - name: Wait for instances to listen on port 5081
-      wait_for: 
-        state: started 
-        host: localhost 
-        port: "{{ port }}"
-        timeout: 15 
-        delay: 5
-
-#    - name: Wait for instances to listen on port naszaaplikacja
-#      wait_for: 
-#        state: started 
-#        host: localhost 
-#        port: "{{ port }}"
-#        timeout: 15 
-#        delay: 5

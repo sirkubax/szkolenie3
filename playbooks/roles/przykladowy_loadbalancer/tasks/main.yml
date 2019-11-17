@@ -1,6 +1,14 @@
 - name: Install nginx
   package: name=nginx state=present
+  ignore_errors: yes
 
 - name: Copy nginx configuration
-  template: src=loadbalancer.conf dest=/etc/nginx/conf.d/default.conf
+  template: src=loadbalancer_upstream.conf dest=/etc/nginx/sites-available/naszaaplikacja
+  notify: restart nginx
+
+- name: Activate the app
+  file: 
+    src: /etc/nginx/sites-available/naszaaplikacja
+    dest: /etc/nginx/sites-enabled/naszaaplikacja
+    state: link
   notify: restart nginx

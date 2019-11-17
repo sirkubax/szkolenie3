@@ -1,0 +1,41 @@
+- hosts: naszaaplikacja
+
+
+  tasks:
+  - name: napisz ze jest dobra pogoda
+    shell: echo 'dzisiaj pogoda jest ok'
+    register: twojazmienna
+
+  - name: potwierdzam
+    shell: echo 'dzisiaj pogoda jest ok'
+    when:
+      - '"pogoda jest ok" in twojazmienna.stdout'
+    changed_when:
+      - '"ok" not in twojazmienna.stdout'
+
+  - name: lookup
+    debug:
+      msg: "{{ lookup('pipe', 'date') }}, {{ lookup('pipe', 'whoami') }}"
+
+  - name: lookup
+    debug:
+      msg: "{{ lookup('url', 'http://mgmt2.muszynski.pro:5888') }}"
+    register: wynikcurl
+
+  - name: wypisz wynikcurl
+    debug:
+      msg: "{{ wynikcurl }}"
+
+  - name: sprawdz warunki logiczne
+    assert:
+      that:
+        - '"szkolenieOK" in wynikcurl.msg'
+        - '"pogoda jest ok" in twojazmienna.stdout'
+
+  - command: /usr/bin/false
+    retries: 3
+    delay: 3
+    register: result
+    until: result.rc == 0
+    #ignore_errors: yes
+    #failed_when: false

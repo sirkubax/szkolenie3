@@ -1,0 +1,3 @@
+---
+- debug: var=hostvars[item].ansible_hostname
+  with_items: "{{ play_hosts }}"
