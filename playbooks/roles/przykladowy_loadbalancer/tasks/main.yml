@@ -12,3 +12,9 @@
     dest: /etc/nginx/sites-enabled/naszaaplikacja
     state: link
   notify: restart nginx
+
+- name: remove default port
+  file: 
+    path: /etc/nginx/sites-enabled/naszaaplikacja
+    state: absent
+  notify: restart nginx

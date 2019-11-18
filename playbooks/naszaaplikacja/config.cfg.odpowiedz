@@ -2,8 +2,11 @@
 port = {{ port }}
 nazwa = {{ lookup('pipe', 'whoami') }}
 host = przykladowa_nazwa_serwera
-mysql_host = 1.2.3.4
-mysql_port = 3306
-mysql_user = szkolenie
-mysql_haslo = tajne
-mysql_db = szkolenie
+
+mysql:
+  port: 3306
+  username: szkoelnie_user
+  pass: sekret
+  dbname: szkolenie_db
+  host: 3.10.56.184
+
