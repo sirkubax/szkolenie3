@@ -3,7 +3,7 @@
   become: true
 
   vars:
-    katalog_glowny: /var/www/szkolenie
+    katalog_glowny: /var/www/szkolenie.pl
     #katalog_glowny: /var/www/szkolenie.pl
     katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
     log_dir: "{{ katalog_glowny }}/logs"
