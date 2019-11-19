@@ -4,8 +4,9 @@
 
   #zmienne przydatne do parametryzacji wgrania, oraz szablonowania konfiguracji
   vars:
-    katalog_aplikacji: /var/www/szkolenie
-    log_dir: /var/www/szkolenie/logs/
+    katalog_glowny: /var/www/szkolenie.pl
+    katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
+    log_dir: "{{ katalog_glowny }}/logs"
     port: 5081
 
   pre_tasks: []
@@ -19,7 +20,12 @@
 
     - name: 'wlacz virtualhost'
 
+    - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
+
+    ## W instrukcji jest blad - wgrywamy do katalogu
+    # dest: "{{ katalog_glowny }}"
     - name: 'klonuj repozytorium aplikacji'
+  
 
     - name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
 
