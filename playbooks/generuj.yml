@@ -1,0 +1,36 @@
+#- hosts: apache[0]
+- hosts: localhost
+  vars:
+    moja_lista: apache
+  tasks:
+    - set_fact:
+        moja_lista: apache
+ 
+ 
+- hosts: "{{ hostvars['localhost'].moja_lista }}"
+
+  vars:
+    lista_numerow:
+        - 3
+        - 4
+        - 7
+
+  tasks: 
+  - add_host:
+      hostname: 'jakastamnazawa{{ item }}.costamcostam'
+      groups:
+        - grupa_generuj
+    loop: "{{ lista_numerow }}"
+
+  - debug:
+      msg: "{{ groups['grupa_generuj'] }}"
+
+
+- hosts: grupa_generuj
+#- hosts: "{{ moja_lista }}"                                  
+                                                              
+  tasks:                                                      
+  - debug:                                                    
+      msg: "{{ play_hosts }}"                                 
+                                                              
+
