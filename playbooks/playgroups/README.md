@@ -7,3 +7,12 @@ It is like serial:1 - but for all groups
 
 This is achieved with async - you can print logs using results_file
 Unfortunatelly I did not find a way to run (import_playbook) in a loop
+
+
+RUN
+
+```
+cd szkolenie3
+
+ansible-playbook playbooks/playgroups/play.yml -vvv --limit localhost -i etc/inv/inventory_groups
+```
