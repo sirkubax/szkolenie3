@@ -1,0 +1,8 @@
+- hosts: "{{ myhosts }}"
+
+  tasks:
+      - debug:
+          msg: '{{ play_hosts }}'
+        name: 'in sub-play'
+        delegate_to: localhost
+

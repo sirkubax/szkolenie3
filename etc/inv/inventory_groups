@@ -15,6 +15,7 @@ hostB0
 
 [groupA]
 hostA0
+localhost
 hostA1
 hostA2
 hostA3

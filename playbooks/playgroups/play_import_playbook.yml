@@ -1,0 +1,66 @@
+- hosts: all
+
+  tasks:
+
+    - name: list groups
+      debug: 
+        msg: "{{ groups }}"
+
+    - set_fact:
+        groups_number: "{{ groups |length }}" 
+        groups_elements_lengths: []
+
+    - name: count group elements
+      set_fact:
+        groups_elements_lengths: "{{ groups_elements_lengths + [ item.value |length ] }}"
+      loop: "{{ lookup('dict', groups) }}"
+      when:  
+       - '"run_" not in item.key'
+       - 'item.key != "all"'
+       - 'item.key != "ungruped"'
+
+    - name: debug count group elements
+      debug:
+        msg: "{{ groups_elements_lengths }}"
+
+    - name: group max
+      set_fact:
+        group_elements_count_max: "{{ groups_elements_lengths |max }}"
+        groups_hosts_squence: []
+
+
+    #I dont know how to put end={{ group_elements_count_max }} into lookup sequence
+    #list of numbers 0 1 2 3 .. group_elements_count_max-1
+    - name: groups_hosts_squence 
+      set_fact:
+        groups_hosts_squence: "{{ groups_hosts_squence + [item]  }}"
+      with_sequence: 'end={{ group_elements_count_max |int - 1 }} start=0'
+
+    # run groups_hosts_squence number of times (for N groups inside)
+    - name: compute run_groups
+      include_tasks: compute_run_groups.yml
+      #loop: "{{ lookup('sequence', 'end=group_elements_count_max start=1 step=1') }}"
+      loop: "{{ groups_hosts_squence }}"
+      loop_control:
+        loop_var: outer_group_item
+
+    - name: list groups
+      debug: 
+        msg: "{{ groups }}"
+      run_once: yes
+
+      #    - name: debug count group elements
+      #      debug:
+      #        msg: "{{  groups['run_1']  }}"
+      #      run_once: yes
+
+- import_playbook: sub_play.yml 
+  vars:
+      myhosts: run_0
+  #when: '"run_0" in groups'
+
+- import_playbook: sub_play.yml myhosts=run_1
+- import_playbook: sub_play.yml myhosts=run_2
+- import_playbook: sub_play.yml myhosts=run_3
+- import_playbook: sub_play.yml myhosts=run_4
+- import_playbook: sub_play.yml myhosts=run_5
