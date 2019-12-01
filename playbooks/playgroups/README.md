@@ -14,7 +14,6 @@ RUN
 
 ```
 cd szkolenie3
-
 ansible-playbook playbooks/playgroups/play.yml -vvv --limit localhost -i etc/inv/inventory_groups
 ```
 
@@ -24,5 +23,6 @@ Simplified version that utilize import_playbook + predefined groups run_N where 
 Note if all hosts in a group are inaccessible, the play would be skipped (due to no available hosts).
 
 ```
-ansible-playbook play_import_playbook.yml -i ~/szkolenie3/etc/inv/inventory_groups
+cd szkolenie3
+ansible-playbook  playbooks/playgroups/play_import_playbook.yml -i etc/inv/inventory_groups
 ```
