@@ -16,3 +16,10 @@ cd szkolenie3
 
 ansible-playbook playbooks/playgroups/play.yml -vvv --limit localhost -i etc/inv/inventory_groups
 ```
+
+
+Example 2 - with staticly defined group imports - make sure there is more than MAX number of host in your biggest group
+
+```
+ansible-playbook play_import_playbook.yml -i ~/szkolenie3/etc/inv/inventory_groups
+```
