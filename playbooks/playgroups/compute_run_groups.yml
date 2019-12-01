@@ -1,0 +1,28 @@
+---
+    - name: debug sequence number
+      debug:
+        msg: "{{ outer_group_item }}"
+
+    - name: count group elements
+      set_fact:
+        groups_no_run: {}
+
+    - name: count group elements
+      set_fact:
+        groups_no_run: '{{  groups_no_run |combine( {item.key: item.value}) }}'
+      when:  "{{ 'run_' not in item.key }}"
+      with_dict: "{{ groups }}"
+
+    #for all groups, get host[groups_hosts_squence]
+    - name: add_host to run_X group
+      add_host:
+        name: "{{ item.value[outer_group_item|int] }}"
+        groups: "run_{{ outer_group_item }}"
+      loop: "{{ lookup('dict', groups_no_run) }}"
+      when:
+        - 'item.value[outer_group_item|int] | default(False)'
+
+    - name: list groups
+      debug: 
+        msg: "{{ groups }}"
+      run_once: yes

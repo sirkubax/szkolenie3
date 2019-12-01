@@ -1,0 +1,40 @@
+---
+    - name: print group number
+      debug:
+        msg: "{{ run_N_item }}"
+
+    - name: 
+      set_fact:
+        running_group: "run_{{ run_N_item }}"
+    - name: 
+      set_fact:
+        running_group_dict: "{{ groups[running_group] }}"
+
+    #https://devops.stackexchange.com/questions/3860/is-there-a-way-to-run-with-items-loops-in-parallel-in-ansible
+#    - name: execute action for all host - at the same time
+#      shell: "sleep 2; echo here I execute action on some host {{ hostvars[item].inventory_hostname|default(item) }} time: {{ lookup('pipe', 'date +%s%N') }}"
+#      loop: "{{ running_group_dict }}"
+#      when:
+#        - 'hostvars[item] | default(False)'
+#      register: _alias_vc_0
+#      async: 60
+#      poll: 0
+#
+#    - name: print async satus
+#      debug:
+#        msg: "{{ item }}"
+#      loop: "{{_alias_vc_0.results}}"
+#
+#
+#    - name: Wait for My long running task to finish
+#      async_status:
+#        jid: "{{ item.ansible_job_id }}"
+#      register: _jobs
+#      retries: 20
+#      delay: 2
+#      until: _jobs.finished
+#      loop: "{{_alias_vc_0.results}}"
+#
+#    - name: print jobs satus
+#      debug:
+#        msg: "{{ _jobs }}"

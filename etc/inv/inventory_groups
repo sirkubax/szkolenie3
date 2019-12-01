@@ -1,0 +1,31 @@
+[mylocalhost]
+localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python"
+
+#grupa apache
+[apache]
+hostA0
+hostA1
+
+[backend]
+hostB0
+
+#[prod:children]
+#apache
+#backend
+
+[groupA]
+hostA0
+hostA1
+hostA2
+hostA3
+
+[groupB]
+hostB0
+hostB1
+hostB2
+hostB3
+
+[groupC]
+hostC0
+hostC1
+hostC2
