@@ -87,16 +87,11 @@
         msg: "{{ groups_run }}"
       run_once: yes
 
-##gdyby tylko dalo sie zorbic include_playboook w pentli zamiast import_playbook ktore jest statyczne
-#    # run groups_run_sequence number of times N groups
-#    - name: run (for all groups) one host per group at same time (if run_N group is not empty)
-#      include_tasks: loop_run_groups.yml
-#      loop: "{{ groups_run_sequence }}"
-#      loop_control:
-#        loop_var: run_N_item
-
+#gdyby tylko dalo sie zorbic include_playboook w pentli zamiast import_playbook ktore jest statyczne
+    # run groups_run_sequence number of times N groups
     - name: run (for all groups) one host per group at same time (if run_N group is not empty)
-      include: loop_run_groups_play.yml
+      include_tasks: loop_run_groups.yml
       loop: "{{ groups_run_sequence }}"
       loop_control:
         loop_var: run_N_item
+
