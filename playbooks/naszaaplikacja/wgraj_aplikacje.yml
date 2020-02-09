@@ -13,24 +13,27 @@
 
   tasks:
     - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi przekazując listę'
+      apt: 
+        pkg:
+          - apache2
 
-    - name: 'zainstaluj aplikacje apache2 i pozostale pakiety przy pomocy with_items'
-
-    - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf jako template'
-
-    - name: 'wlacz virtualhost'
-
-    - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
-
-    ## W instrukcji jest blad - wgrywamy do katalogu
-    # dest: "{{ katalog_glowny }}"
-    - name: 'klonuj repozytorium aplikacji'
-  
-
-    - name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
-
-    - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
-
-    - name: 'utworz katalog na logi'
-
-    - name: 'restart apache'
+#    - name: 'zainstaluj aplikacje apache2 i pozostale pakiety przy pomocy with_items'
+#
+#    - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf jako template'
+#
+#    - name: 'wlacz virtualhost'
+#
+#    - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
+#
+#    ## W instrukcji jest blad - wgrywamy do katalogu
+#    # dest: "{{ katalog_glowny }}"
+#    - name: 'klonuj repozytorium aplikacji'
+#  
+#
+#    - name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
+#
+#    - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
+#
+#    - name: 'utworz katalog na logi'
+#
+#    - name: 'restart apache'
