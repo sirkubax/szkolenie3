@@ -37,9 +37,9 @@
 
     - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf jako template'
       template:
-          src: naszaaplikacja.apache.conf
-          dest: /etc/apache2/sites-available/
-      backup: True
+        src: naszaaplikacja.apache.conf
+        dest: /etc/apache2/sites-available/
+        backup: True
 
     - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
       lineinfile: 
@@ -56,15 +56,15 @@
 
     - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
       template:
-          src: naszaaplikacja.wsgi
-          dest: "{{ katalog_aplikacji }}"
-      backup: True
+        src: naszaaplikacja.wsgi
+        dest: "{{ katalog_aplikacji }}"
+        backup: True
 
     - name: 'Wgraj sparametryzowany config.cfg (jako template)'
       template:
-          src: config.cfg
-          dest: "{{ katalog_aplikacji }}"
-      backup: True
+        src: config.cfg
+        dest: "{{ katalog_aplikacji }}"
+        backup: True
 
     - name: 'utworz katalog na logi'
       file:
