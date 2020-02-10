@@ -2,7 +2,7 @@
 #Uruchomienie:
 #~/szkolenie3$ ansible-playbook playbooks/install_zabbix_example.yml 
 
-- hosts: zabbix-agents
+- hosts: zabbix_agents
   become: true
 
   vars:

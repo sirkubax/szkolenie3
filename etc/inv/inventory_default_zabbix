@@ -5,10 +5,10 @@ system_env=szkolenie
 zabbix-servers
 zabbix-agents
 
-[zabbix-servers]
+[zabbix_servers]
 1.2.3.4
 
-[zabbix-agents]
+[zabbix_agents]
 3.8.158.189
 52.56.161.127
 52.56.177.236 #nowy serwer
