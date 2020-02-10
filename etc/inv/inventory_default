@@ -38,7 +38,7 @@ backend
 [mysql]
 10.218.0.117
 
-[zabbix-agent]
+[zabbix_agent]
 3.8.158.189
 
 [naszaaplikacja]
