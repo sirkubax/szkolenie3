@@ -38,7 +38,7 @@
 
     - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf jako template'
       template:
-          src: "{{ ansible_os_family }}.conf"
+          src: "naszaaplikacja.apache.conf"
           dest: /etc/apache2/sites-available/
 
     - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
