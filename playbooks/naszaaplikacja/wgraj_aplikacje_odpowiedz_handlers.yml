@@ -40,7 +40,6 @@
       template:
           src: naszaaplikacja.apache.conf
           dest: /etc/apache2/sites-available/
-      backup: True
       notify: restart apache
 
     - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
@@ -62,14 +61,12 @@
       template:
           src: naszaaplikacja.wsgi
           dest: "{{ katalog_aplikacji }}"
-      backup: True
       notify: restart apache
 
     - name: 'Wgraj sparametryzowany config.cfg (jako template)'
       template:
           src: config.cfg
           dest: "{{ katalog_aplikacji }}"
-      backup: True
       notify: restart apache
 
     - name: 'utworz katalog na logi'

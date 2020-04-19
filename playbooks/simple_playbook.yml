@@ -1,7 +1,19 @@
 - hosts: all
 
   tasks: 
+  - set_fact:
+      aaa: 1235 
+    tags:
+        - always
+
   - ping:
+      data: "{{ aaa }}"
+    tags:
+        - pierwszy
+        - drugi
 
   - name: "wykonaj modul shell"
     shell: date; whoami
+    tags:
+        - pierwszy
+        - always
