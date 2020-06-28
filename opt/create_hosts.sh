@@ -40,6 +40,6 @@ ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=bac
 #for i in `seq -w 01 15`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wordpress02_szk$i role=wordpress"; done
 #ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.large hostname=awx role=awx"
 
-for i in `seq -w 01 15`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=naszaaplikacja01_szk$i role=naszaaplikacja"; done
+for i in `seq -w 01 08`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=naszaaplikacja01_szk$i role=naszaaplikacja"; done
 
 ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=awx01 role=awx"

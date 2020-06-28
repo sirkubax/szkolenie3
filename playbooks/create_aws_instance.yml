@@ -135,7 +135,8 @@
   gather_facts: false
 
   vars:
-  - vars_files_var: ["vars/{{ location }}.yml", "vars/location_default.yml"] #Name of the region: irland, frankfurt, etc...
+    - ansible_ssh_user: ubuntu
+    - vars_files_var: ["vars/{{ location }}.yml", "vars/location_default.yml"] #Name of the region: irland, frankfurt, etc...
 
   pre_tasks:
     - include_vars: "{{ item }}"
@@ -182,6 +183,7 @@
   gather_facts: True
 
   vars:
+  - ansible_ssh_user: ubuntu
   - vars_files_var: ["vars/{{ location }}.yml", "vars/location_default.yml"] #Name of the region: irland, frankfurt, etc...
     ssh_known_hosts_file: "/etc/ssh/ssh_known_hosts"
 
@@ -196,6 +198,8 @@
 - hosts: temp_group
   become: true
   gather_facts: True
+  vars:
+    ansible_ssh_user: ubuntu
 
   roles:
       - { role: sys_manage_keys }
