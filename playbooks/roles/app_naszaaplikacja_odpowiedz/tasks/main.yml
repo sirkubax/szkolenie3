@@ -27,22 +27,22 @@
     requirements: "{{ katalog_aplikacji }}/requirements.txt"
     virtualenv: "{{ katalog_aplikacji }}/venv"
   name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
-  notity:
+  notify:
     - restart apache
 
 - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf{{ port }} jako template'
   template:
       src: naszaaplikacja.apache.conf
       dest: "/etc/apache2/sites-available/naszaaplikacja.apache{{ port }}.conf"
-  backup: True
-  notity:
+      backup: True
+  notify:
     - restart apache
 
 - name: 'usun /etc/apache2/sites-available/naszaaplikacja.apache jako template'
   file:
     path: "/etc/apache2/sites-available/naszaaplikacja.apache"
     state: absent
-  notity:
+  notify:
     - restart apache
 
 - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
@@ -50,7 +50,7 @@
     dest: /etc/apache2/ports.conf
     line: "Listen {{ port }}"
     regexp: "^Listen {{ port }}"
-  notity:
+  notify:
     - restart apache
 
 - name: 'wylacz port 80'
@@ -58,7 +58,7 @@
     dest: /etc/apache2/ports.conf
     regexp: "^Listen 80"
     state: absent
-  notity:
+  notify:
     - restart apache
 
 - name: 'wlacz virtualhost'
@@ -67,23 +67,23 @@
     creates: /etc/apache2/sites-enabled/{{ item }}
   loop: 
     - "naszaaplikacja.apache{{ port }}.conf"
-  notity:
+  notify:
     - restart apache
 
 - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
   template:
       src: naszaaplikacja.wsgi
       dest: "{{ katalog_aplikacji }}"
-  backup: True
-  notity:
+      backup: True
+  notify:
     - restart apache
 
 - name: 'Wgraj sparametryzowany config.cfg (jako template)'
   template:
       src: config.cfg
       dest: "{{ katalog_aplikacji }}"
-  backup: True
-  notity:
+      backup: True
+  notify:
     - restart apache
 
 - name: 'utworz katalog na logi'
@@ -93,5 +93,5 @@
     owner: www-data
     group: www-data
     mode: 0755
-  notity:
+  notify:
     - restart apache
